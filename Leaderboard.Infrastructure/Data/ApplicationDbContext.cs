@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Leaderboard.Data
+namespace Leaderboard.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

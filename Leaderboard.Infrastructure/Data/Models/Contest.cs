@@ -18,6 +18,10 @@ namespace Leaderboard.Infrastructure.Data.Models
 		public string Name { get; set; } = string.Empty;
 
 		[Required]
+		[Comment("Contest Is Active")]
+		public bool IsActive { get; set; }
+
+		[Required]
 		[Comment("Organization Identifier")]
 		public Guid OrganizationId { get; set; }
 

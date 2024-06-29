@@ -25,6 +25,10 @@ namespace Leaderboard.Infrastructure.Data.Models
 		public int? NumberOfMembers { get; set; }
 
 		[Required]
+		[Comment("Team Is Active")]
+		public bool IsActive { get; set; }
+
+		[Required]
 		[Comment("Contest Identifier")]
 		public Guid ContestId { get; set; }
 

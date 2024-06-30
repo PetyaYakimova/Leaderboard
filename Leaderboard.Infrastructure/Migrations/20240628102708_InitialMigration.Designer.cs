@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Leaderboard.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(LeaderboardDbContext))]
     [Migration("20240628102708_InitialMigration")]
     partial class InitialMigration
     {

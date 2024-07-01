@@ -4,31 +4,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtension
-    {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-        {
-            return services;
-        }
+	public static class ServiceCollectionExtension
+	{
+		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+		{
+			return services;
+		}
 
-        public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
-        {
-            var connectionString = config.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+		public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
+		{
+			var connectionString = config.GetConnectionString("DefaultConnection");
+			services.AddDbContext<LeaderboardDbContext>(options =>
+				options.UseSqlServer(connectionString));
 
-            services.AddDatabaseDeveloperPageExceptionFilter();
+			services.AddDatabaseDeveloperPageExceptionFilter();
 
-            return services;
-        }
+			return services;
+		}
 
-        public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)
-        {
-            services
-                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+		public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)
+		{
+			services
+				.AddDefaultIdentity<IdentityUser>(options =>
+				{
+					options.SignIn.RequireConfirmedAccount = false;
+					options.Password.RequiredLength = 8;
+					options.Password.RequireDigit = false;
+					options.Password.RequireNonAlphanumeric = false;
+					options.Password.RequireUppercase = false;
 
-            return services;
-        }
-    }
+				})
+				.AddEntityFrameworkStores<LeaderboardDbContext>();
+
+			return services;
+		}
+	}
 }

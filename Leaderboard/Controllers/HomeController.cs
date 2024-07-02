@@ -15,6 +15,11 @@ namespace Leaderboard.Controllers
 
         public IActionResult Index()
         {
+            if (User?.Identity?.IsAuthenticated ?? false)
+            {
+                RedirectToAction("Index", "Organization");
+            }
+
             return View();
         }
 

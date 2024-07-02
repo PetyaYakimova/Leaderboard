@@ -1,4 +1,6 @@
-﻿using Leaderboard.Infrastructure.Data;
+﻿using Leaderboard.Core.Contracts;
+using Leaderboard.Core.Services;
+using Leaderboard.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,8 @@ namespace Microsoft.Extensions.DependencyInjection
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
+			services.AddTransient<IOrganizationService, OrganizationService>();
+
 			return services;
 		}
 

@@ -1,6 +1,7 @@
 ﻿using Leaderboard.Core.Contracts;
 using Leaderboard.Core.Services;
 using Leaderboard.Infrastructure.Data;
+using Leaderboard.Infrastructure.Data.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
-			services.AddTransient<IOrganizationService, OrganizationService>();
+			services.AddScoped<IOrganizationService, OrganizationService>();
 
 			return services;
 		}
@@ -20,6 +21,8 @@ namespace Microsoft.Extensions.DependencyInjection
 			var connectionString = config.GetConnectionString("DefaultConnection");
 			services.AddDbContext<LeaderboardDbContext>(options =>
 				options.UseSqlServer(connectionString));
+
+			services.AddScoped<IRepository, Repository>();
 
 			services.AddDatabaseDeveloperPageExceptionFilter();
 

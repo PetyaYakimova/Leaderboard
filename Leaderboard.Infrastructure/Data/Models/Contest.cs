@@ -17,6 +17,10 @@ namespace Leaderboard.Infrastructure.Data.Models
 		[Comment("Contest Name")]
 		public string Name { get; set; } = string.Empty;
 
+		[MaxLength(ContestDescriptionMaxLength)]
+		[Comment("Contest Description")]
+		public string? Description { get; set; }
+
 		[Required]
 		[Comment("Contest Is Active")]
 		public bool IsActive { get; set; }

@@ -1,14 +1,28 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Leaderboard.Core.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Leaderboard.Controllers
 {
-    [Authorize]
-    public class OrganizationContrroller : Controller
+    public class OrganizationContrroller : BaseController
     {
-        public IActionResult Index()
+        private readonly ILogger<OrganizationContrroller> logger;
+        private readonly IOrganizationService organizationService;
+
+        public OrganizationContrroller(ILogger<OrganizationContrroller> logger, IOrganizationService organizationService)
         {
-            return View();
+            this.logger = logger;
+            this.organizationService = organizationService;
+        }
+
+		[HttpGet]
+		public async Task<IActionResult> Index()
+        {
+            Guid organizationId = await organizationService.GetUserOrganizationIdAsync(User.Id());
+            var model = await organizationService.GetOrganizationInfoAsync(organizationId);
+            
+            return View(model);
         }
     }
 }

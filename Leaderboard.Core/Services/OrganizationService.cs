@@ -2,6 +2,7 @@
 using Leaderboard.Core.Models.Organization;
 using Leaderboard.Infrastructure.Data.Common;
 using Leaderboard.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Leaderboard.Core.Services
@@ -36,6 +37,22 @@ namespace Leaderboard.Core.Services
 			}
 
 			return model;
+		}
+
+		public async Task<Guid?> GetUserOrganizationIdAsync(string userId)
+		{
+			var user = await repository.AllAsReadOnly<IdentityUser>()
+				.FirstOrDefaultAsync(u => u.Id == userId);
+
+			if (user == null)
+			{
+				//TODO: Change with custom exception
+				throw new ArgumentNullException();
+			}
+
+			//TODO: Fix this when we have the organization Id for the extended user.
+			return new Guid();
+			//return user.OrganizationId;
 		}
 
 		public async Task<bool> OrganizationExistsByIdAsync(Guid organizationId)

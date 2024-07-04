@@ -7,5 +7,7 @@ namespace Leaderboard.Core.Contracts
 		Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId);
 
 		Task<bool> OrganizationExistsByIdAsync(Guid organizationId);
+
+		Task<Guid> GetUserOrganizationIdAsync(string userId);
 	}
 }

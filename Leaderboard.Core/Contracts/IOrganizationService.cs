@@ -1,4 +1,5 @@
-﻿using Leaderboard.Core.Models.Organization;
+﻿using Leaderboard.Core.Models.Contest;
+using Leaderboard.Core.Models.Organization;
 
 namespace Leaderboard.Core.Contracts
 {
@@ -9,5 +10,7 @@ namespace Leaderboard.Core.Contracts
 		Task<bool> OrganizationExistsByIdAsync(Guid organizationId);
 
 		Task<Guid> GetUserOrganizationIdAsync(string userId);
-	}
+
+        Task<Guid> CreateOrganizationAsync(string organizationName);
+    }
 }

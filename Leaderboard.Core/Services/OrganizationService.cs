@@ -2,12 +2,11 @@
 using Leaderboard.Core.Models.Organization;
 using Leaderboard.Infrastructure.Data.Common;
 using Leaderboard.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Leaderboard.Core.Services
 {
-	public class OrganizationService : IOrganizationService
+    public class OrganizationService : IOrganizationService
 	{
 		private readonly IRepository repository;
 
@@ -16,7 +15,21 @@ namespace Leaderboard.Core.Services
 			this.repository = repository;
 		}
 
-		public async Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId)
+        public async Task<Guid> CreateOrganizationAsync(string organizationName)
+        {
+			Organization organization = new Organization()
+			{
+				Id = Guid.NewGuid(),
+				Name = organizationName
+            };
+
+            await repository.AddAsync(organization);
+            await repository.SaveChangesAsync();
+
+            return organization.Id;
+        }
+
+        public async Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId)
 		{
 			var model = await repository.AllAsReadOnly<Organization>()
 				.Where(o => o.Id == organizationId)
@@ -39,9 +52,9 @@ namespace Leaderboard.Core.Services
 			return model;
 		}
 
-		public async Task<Guid?> GetUserOrganizationIdAsync(string userId)
+		public async Task<Guid> GetUserOrganizationIdAsync(string userId)
 		{
-			var user = await repository.AllAsReadOnly<IdentityUser>()
+			var user = await repository.AllAsReadOnly<ApplicationUser>()
 				.FirstOrDefaultAsync(u => u.Id == userId);
 
 			if (user == null)
@@ -50,9 +63,7 @@ namespace Leaderboard.Core.Services
 				throw new ArgumentNullException();
 			}
 
-			//TODO: Fix this when we have the organization Id for the extended user.
-			return new Guid();
-			//return user.OrganizationId;
+			return user.OrganizationId;
 		}
 
 		public async Task<bool> OrganizationExistsByIdAsync(Guid organizationId)

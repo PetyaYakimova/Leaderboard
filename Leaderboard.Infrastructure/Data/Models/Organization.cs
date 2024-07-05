@@ -20,6 +20,6 @@ namespace Leaderboard.Infrastructure.Data.Models
 		public IEnumerable<Contest> Contests { get; set; } = new List<Contest>();
 
 		//TODO: Add Custom Application user who has an organization and bool property if he can add users
-		public IEnumerable<IdentityUser> Users { get; set; } = new List<IdentityUser>();
+		public IEnumerable<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
 	}
 }

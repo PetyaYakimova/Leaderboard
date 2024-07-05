@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Leaderboard.Infrastructure.Data
 {
-    public class LeaderboardDbContext : IdentityDbContext
+    public class LeaderboardDbContext : IdentityDbContext<ApplicationUser>
     {
         public LeaderboardDbContext(DbContextOptions<LeaderboardDbContext> options)
             : base(options)

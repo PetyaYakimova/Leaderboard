@@ -1,0 +1,23 @@
+﻿.darkbgwhitetext {
+    background-color: #202020;
+    color: white;
+}
+
+.custominputlink {
+    background-color: #202020;
+    font-weight: 400;
+    border: none;
+    text-decoration: underline;
+}
+
+.customNoResultsFoundMessage {
+    background-color: #252525;
+    border: 2px solid;
+    border-color: red;
+    padding: 3em;
+    margin-bottom: 3em;
+}
+
+nav li :hover {
+    background-color: #202020;
+}

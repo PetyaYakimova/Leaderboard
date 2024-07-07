@@ -1,5 +1,5 @@
-﻿using Leaderboard.Core.Models.Contest;
-using Leaderboard.Core.Models.Organization;
+﻿using Leaderboard.Core.Models.Organization;
+using static Leaderboard.Core.Constants.LimitConstants;
 
 namespace Leaderboard.Core.Contracts
 {
@@ -12,5 +12,7 @@ namespace Leaderboard.Core.Contracts
 		Task<Guid> GetUserOrganizationIdAsync(string userId);
 
         Task<Guid> CreateOrganizationAsync(string organizationName);
+
+		Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchedTerm = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
     }
 }

@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Leaderboard.Core\Leaderboard.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Organization\" />
-  </ItemGroup>
-
 </Project>

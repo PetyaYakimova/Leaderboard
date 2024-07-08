@@ -1,0 +1,29 @@
+﻿@model OrganizationPreviewModel
+@{
+	ViewBag.Title = Model.Name;
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+	<div class="form-group col-md-6 d-flex">
+		<label asp-for="NumberOfContests" class="fw-bold me-2"></label>
+		<p>@Model.NumberOfContests</p>
+	</div>
+	<form method="get" class="col-md-6 d-flex">
+		<input type="submit" asp-controller="Contest" asp-action="All" value="See all" class="link-warning custominputlink" />
+	</form>
+</div>
+<hr />
+
+<div class="row">
+	<div class="form-group col-md-6 d-flex">
+		<label asp-for="NumberOfAdministrators" class="fw-bold me-2"></label>
+		<p>@Model.NumberOfAdministrators</p>
+	</div>
+	<form method="get" class="col-md-6 d-flex">
+		<input type="submit" asp-controller="Organization" asp-action="Administrators" value="See all" class="link-warning custominputlink" />
+	</form>
+</div>
+<hr />

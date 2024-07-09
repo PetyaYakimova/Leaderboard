@@ -20,7 +20,7 @@ namespace Leaderboard.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                RedirectToAction("Index", "Organization");
+                return RedirectToAction("Index", "Organization");
             }
 
             return View();

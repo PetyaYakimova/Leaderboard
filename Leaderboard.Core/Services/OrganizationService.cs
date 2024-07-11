@@ -3,6 +3,7 @@ using Leaderboard.Core.Exceptions;
 using Leaderboard.Core.Models.Organization;
 using Leaderboard.Infrastructure.Data.Common;
 using Leaderboard.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using static Leaderboard.Core.Constants.MessagesConstants;
@@ -20,6 +21,45 @@ namespace Leaderboard.Core.Services
 		{
 			this.logger = logger;
 			this.repository = repository;
+		}
+
+		public async Task AddUserAsync(UserFormViewModel model, Guid organizationId)
+		{
+			if (await this.OrganizationExistsByIdAsync(organizationId) == false)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Organization), organizationId);
+				throw new EntityNotFoundException();
+			}
+
+			var hasher = new PasswordHasher<ApplicationUser>();
+
+			ApplicationUser user = new ApplicationUser()
+			{
+				Id = Guid.NewGuid().ToString(),
+				Email = model.Email,
+				NormalizedEmail = model.Email.ToUpper(),
+				UserName = model.Email,
+				NormalizedUserName = model.Email.ToUpper(),
+				CanAddUsers = model.CanAddUsers,
+				OrganizationId = organizationId
+			};
+
+			user.PasswordHash = hasher.HashPassword(user, model.Password);
+
+			await repository.AddAsync(user);
+			await repository.SaveChangesAsync();
+		}
+
+		public async Task<bool> CanUserAddUsersAsync(string userId)
+		{
+			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
+
+			if (user == null)
+			{
+				return false;
+			}
+
+			return user.CanAddUsers;
 		}
 
 		public async Task<Guid> CreateOrganizationAsync(string organizationName)

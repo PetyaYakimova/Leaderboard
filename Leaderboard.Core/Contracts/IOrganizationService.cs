@@ -14,5 +14,9 @@ namespace Leaderboard.Core.Contracts
         Task<Guid> CreateOrganizationAsync(string organizationName);
 
 		Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchedTerm = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
-    }
+
+		Task<bool> CanUserAddUsersAsync(string userId);
+
+		Task AddUserAsync(UserFormViewModel model, Guid organizationId);
+	}
 }

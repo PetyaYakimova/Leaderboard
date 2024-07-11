@@ -1,4 +1,6 @@
 ﻿@model AllUsersQueryModel
+@inject IOrganizationService organizationService
+
 @{
 	ViewBag.Title = "Administrators";
 }
@@ -78,4 +80,10 @@ else
 		</div>
 	</div>
 }
+
+@if (await organizationService.CanUserAddUsersAsync(User.Id()))
+{
+	<a asp-action="AddAdministrator" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Add Administrator</a>
+}
+
 

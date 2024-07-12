@@ -1,0 +1,27 @@
+﻿@model UserFormViewModel
+
+<div class="row">
+	<div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+		<form method="post">
+			<div class="mb-3">
+				<label asp-for="@Model.Email" class="form-label-add-edit"></label>
+				<input asp-for="@Model.Email" class="form-control" aria-required="true" />
+				<span asp-validation-for="@Model.Email" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<label asp-for="@Model.Password" class="form-label-add-edit"></label>
+				<input asp-for="@Model.Password" class="form-control" aria-required="true" />
+				<span asp-validation-for="@Model.Password" class="text-danger"></span>
+			</div>
+			<div class="form-check">
+				<input asp-for="@Model.CanAddUsers" type="checkbox">
+				<label asp-for="@Model.CanAddUsers"> </label>
+				<span asp-validation-for="@Model.CanAddUsers" class="text-danger"></span>
+			</div>
+			<br />
+			<div class="mb-3">
+				<input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Save" />
+			</div>
+		</form>
+	</div>
+</div>

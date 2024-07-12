@@ -2,8 +2,9 @@
 using Leaderboard.Core.Services;
 using Leaderboard.Infrastructure.Data;
 using Leaderboard.Infrastructure.Data.Common;
-using Microsoft.AspNetCore.Identity;
+using Leaderboard.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using static Leaderboard.Infrastructure.Constants.DataConstants;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -33,10 +34,10 @@ namespace Microsoft.Extensions.DependencyInjection
 		public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)
 		{
 			services
-				.AddDefaultIdentity<IdentityUser>(options =>
+				.AddDefaultIdentity<ApplicationUser>(options =>
 				{
 					options.SignIn.RequireConfirmedAccount = false;
-					options.Password.RequiredLength = 8;
+					options.Password.RequiredLength = UserPasswordMinLength;
 					options.Password.RequireDigit = false;
 					options.Password.RequireNonAlphanumeric = false;
 					options.Password.RequireUppercase = false;

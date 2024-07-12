@@ -16,5 +16,8 @@
 		public const int TeamNotesMaxLength = 150;
 
 		public const int PointsDescriptionMaxLength = 150;
+
+		public const int UserPasswordMinLength = 8;
+		public const int UserPasswordMaxLength = 100;
 	}
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using static Leaderboard.Core.Constants.MessagesConstants;
+using static Leaderboard.Core.Constants.LimitConstants;
 
 namespace Leaderboard.Core.Services
 {
@@ -76,7 +77,7 @@ namespace Leaderboard.Core.Services
 			return organization.Id;
 		}
 
-		public async Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchTerm = null, int currentPage = 1, int itemsPerPage = 10)
+		public async Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchTerm = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage)
 		{
 			var usersToShow = repository.AllAsReadOnly<ApplicationUser>()
 				.Where(u => u.OrganizationId == organizationId);
@@ -88,7 +89,7 @@ namespace Leaderboard.Core.Services
 			}
 
 			var users = await usersToShow
-				.OrderBy(u => u.Id)
+				.OrderBy(u => u.Email)
 				.Skip((currentPage - 1) * itemsPerPage)
 				.Take(itemsPerPage)
 				.Select(u => new UserTableViewModel()

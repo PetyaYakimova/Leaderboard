@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using static Leaderboard.Infrastructure.Constants.DataConstants;
-using static Leaderboard.Core.Contants.MessagesConstants;
+using static Leaderboard.Core.Constants.MessagesConstants;
 
 namespace Leaderboard.Core.Models.Contest
 {
@@ -21,7 +20,7 @@ namespace Leaderboard.Core.Models.Contest
 		public string? Description { get; set; }
 
 		[Required(ErrorMessage = RequieredMessage)]
-		[Display(Name = "Is Active")]
+		[Display(Name = "Active")]
 		public bool IsActive { get; set; }
 	}
 }

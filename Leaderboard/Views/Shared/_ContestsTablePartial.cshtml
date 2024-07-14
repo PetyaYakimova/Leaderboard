@@ -1,0 +1,32 @@
+﻿@model ContestTableViewModel
+<tr>
+	<td>@Model.Name</td>
+	<td>@Model.NumberOfTeams</td>
+	<td>
+		<form method="post">
+			@if (Model.IsActive)
+			{
+				<input type="submit" asp-action="ChangeStatus" asp-route-id="@Model.Id" value="Deactivate" class="link-danger custominputlink" />
+			}
+			else
+			{
+				<input type="submit" asp-action="ChangeStatus" asp-route-id="@Model.Id" value="Activate" class="link-success custominputlink" />
+			}
+		</form>
+	</td>
+	<td>
+		<form method="get">
+			<input type="submit" asp-action="Edit" asp-route-id="@Model.Id" value="Edit" class="link-warning custominputlink" />
+		</form>
+
+	</td>
+	<td>
+		@if (Model.NumberOfTeams == 0)
+		{
+			<form method="get">
+				<input type="submit" asp-action="Delete" asp-route-id="@Model.Id" value="Delete" class="link-danger custominputlink" />
+			</form>
+		}
+	</td>
+</tr>
+

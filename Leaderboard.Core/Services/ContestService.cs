@@ -78,7 +78,24 @@ namespace Leaderboard.Core.Services
             return contest.Id;
         }
 
-        public async Task<ContestQueryServiceModel> GetAllContestsForOrganizationAsync(Guid organizationId, string? searchTerm = null, int? searchNumberOfTeams = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage)
+		public async Task EditContestAsync(Guid id, ContestFormViewModel model)
+		{
+			var contest = await repository.GetByIdAsync<Contest>(id);
+
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), id);
+				throw new EntityNotFoundException();
+			}
+
+			contest.Name = model.Name;
+			contest.Description = model.Description;
+			contest.IsActive = model.IsActive;
+
+			await repository.SaveChangesAsync();
+		}
+
+		public async Task<ContestQueryServiceModel> GetAllContestsForOrganizationAsync(Guid organizationId, string? searchTerm = null, int? searchNumberOfTeams = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage)
         {
             var contestsToShow = repository.AllAsReadOnly<Contest>()
                 .Where(u => u.OrganizationId == organizationId);
@@ -115,5 +132,22 @@ namespace Leaderboard.Core.Services
                 Entities = contests
             };
         }
-    }
+
+		public async Task<ContestFormViewModel> GetContestByIdAsync(Guid id)
+		{
+			Contest? contest = await repository.GetByIdAsync<Contest>(id);
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), id);
+				throw new EntityNotFoundException();
+			}
+
+            return new ContestFormViewModel()
+            {
+                Name = contest.Name,
+                Description = contest.Description,
+                IsActive = contest.IsActive
+            };
+		}
+	}
 }

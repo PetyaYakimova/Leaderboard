@@ -74,6 +74,29 @@ namespace Leaderboard.Controllers
 			return RedirectToAction(nameof(All));
 		}
 
+		[HttpGet]
+		[ContestExistsForTheUserOrganization]
+		public async Task<IActionResult> Edit(int id)
+		{
+			ContestFormViewModel model = await contestService.GetContestByIdAsync(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ContestExistsForTheUserOrganization]
+		public async Task<IActionResult> Edit(int id, ContestFormViewModel model)
+		{
+			if (ModelState.IsValid == false)
+			{
+				return View(model);
+			}
+
+			await contestService.EditContestAsync(id, model);
+
+			return RedirectToAction(nameof(All));
+		}
+
 		//TODO: Continue with contest edit and delete and details
 
 		[HttpGet]

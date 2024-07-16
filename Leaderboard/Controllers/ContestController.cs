@@ -76,7 +76,7 @@ namespace Leaderboard.Controllers
 
 		[HttpGet]
 		[ContestExistsForTheUserOrganization]
-		public async Task<IActionResult> Edit(int id)
+		public async Task<IActionResult> Edit(Guid id)
 		{
 			ContestFormViewModel model = await contestService.GetContestByIdAsync(id);
 
@@ -85,7 +85,7 @@ namespace Leaderboard.Controllers
 
 		[HttpPost]
 		[ContestExistsForTheUserOrganization]
-		public async Task<IActionResult> Edit(int id, ContestFormViewModel model)
+		public async Task<IActionResult> Edit(Guid id, ContestFormViewModel model)
 		{
 			if (ModelState.IsValid == false)
 			{

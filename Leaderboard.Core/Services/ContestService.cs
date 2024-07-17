@@ -107,6 +107,29 @@ namespace Leaderboard.Core.Services
 			return contest.Id;
 		}
 
+		public async Task DeleteContestAsync(Guid id)
+		{
+			var contest = await repository.AllAsReadOnly<Contest>()
+			   .Include(c => c.Teams)
+			   .Where(c => c.Id == id)
+			   .FirstOrDefaultAsync();
+
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), id);
+				throw new EntityNotFoundException();
+			}
+
+			if (contest.Teams.Count() > 0)
+			{
+				logger.LogError(CannotDeleteContestWithTeamsLoggerErrorMessage);
+				throw new CannotDeleteEntityException();
+			}
+
+			await repository.DeleteAsync<Contest>(id);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task EditContestAsync(Guid id, ContestFormViewModel model)
 		{
 			var contest = await repository.GetByIdAsync<Contest>(id);
@@ -175,6 +198,28 @@ namespace Leaderboard.Core.Services
 			{
 				Name = contest.Name,
 				Description = contest.Description,
+				IsActive = contest.IsActive
+			};
+		}
+
+		public async Task<ContestTableViewModel> GetContestForPreviewAsync(Guid id)
+		{
+			Contest? contest = await repository.AllAsReadOnly<Contest>()
+				.Include(c => c.Teams)
+				.Where(c => c.Id == id)
+				.FirstOrDefaultAsync();
+
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), id);
+				throw new EntityNotFoundException();
+			}
+
+			return new ContestTableViewModel()
+			{
+				Id = contest.Id,
+				Name = contest.Name,
+				NumberOfTeams = contest.Teams.Count(),
 				IsActive = contest.IsActive
 			};
 		}

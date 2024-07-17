@@ -22,5 +22,9 @@ namespace Leaderboard.Core.Contracts
         Task<bool> ContestIsActiveAsync(Guid id);
 
         Task<bool> ContestHasNoTeamsAsync(Guid id);
+
+        Task<ContestTableViewModel> GetContestForPreviewAsync(Guid id);
+
+        Task DeleteContestAsync(Guid id);
 	}
 }

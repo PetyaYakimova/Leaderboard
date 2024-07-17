@@ -10,5 +10,6 @@
 
         //Logger messages
         public const string EntityWithIdWasNotFoundLoggerErrorMessage = "{0} with id {1} was not found!";
+		public const string CannotDeleteContestWithTeamsLoggerErrorMessage = "Cannot delete contest with teams!";
     }
 }

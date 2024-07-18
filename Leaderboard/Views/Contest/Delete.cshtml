@@ -1,0 +1,28 @@
+﻿@model ContestTableViewModel
+
+@{
+	ViewBag.Title = @Model.Name + " - Delete";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<p class="text-danger mb-4 text-center fw-bold">You are about to delete "@Model.Name" contest with @Model.NumberOfTeams teams in it. Are you sure?</p>
+<div class="row">
+	<div class="row justify-content-center">
+		<div class="col-md-2">
+			<form asp-action="All" method="get">
+				<input type="submit" value="Cancel" class="btn btn-warning mb-2 w-100 p-3 fw-bold" />
+			</form>
+		</div>
+		<div class="col-md-2">
+			<form asp-action="Delete" method="post">
+				<input type="hidden" asp-for="@Model.Id" />
+				<input type="hidden" asp-for="@Model.Name" />
+				<input type="hidden" asp-for="@Model.NumberOfTeams" />
+				<input type="hidden" asp-for="@Model.IsActive" />
+				<input type="submit" value="Delete" class="btn btn-danger mb-2 w-100 p-3 fw-bold" />
+			</form>
+		</div>
+	</div>
+</div>

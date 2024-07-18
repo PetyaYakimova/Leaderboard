@@ -97,7 +97,27 @@ namespace Leaderboard.Controllers
 			return RedirectToAction(nameof(All));
 		}
 
-		//TODO: Continue with contest edit and delete and details
+		[HttpGet]
+		[ContestExistsForTheUserOrganization]
+		[ContestHasNoTeams]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			var model = await contestService.GetContestForPreviewAsync(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ContestExistsForTheUserOrganization]
+		[ContestHasNoTeams]
+		public async Task<IActionResult> Delete(ContestTableViewModel model)
+		{
+			await contestService.DeleteContestAsync(model.Id);
+
+			return RedirectToAction(nameof(All));
+		}
+
+		//TODO: Continue details view and logic
 
 		[HttpGet]
         [ContestExistsForTheUserOrganization]
@@ -111,6 +131,7 @@ namespace Leaderboard.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ContestExists]
+        [ContestIsActive]
         public async Task<IActionResult> Leaderboard(Guid id)
         {
             return View(new ContestResultsViewModel());

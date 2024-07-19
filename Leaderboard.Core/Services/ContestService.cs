@@ -107,6 +107,28 @@ namespace Leaderboard.Core.Services
 			return contest.Id;
 		}
 
+		public async Task CreateTeamAsync(TeamFormViewModel model, Guid contestId)
+		{
+			if (await this.ContestExistsByIdAsync(contestId) == false)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), contestId);
+				throw new EntityNotFoundException();
+			}
+
+			Team team = new Team()
+			{
+				Id = new Guid(),
+				Name = model.Name,
+				Notes = model.Notes,
+				IsActive = model.IsActive,
+				NumberOfMembers = model.NumberOfMembers,
+				ContestId = contestId
+			};
+
+			await repository.AddAsync(team);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task DeleteContestAsync(Guid id)
 		{
 			var contest = await repository.AllAsReadOnly<Contest>()
@@ -202,6 +224,38 @@ namespace Leaderboard.Core.Services
 			};
 		}
 
+		public async Task<ContestDetailsViewModel> GetContestDetailsAsync(Guid id)
+		{
+			Contest? contest = await repository.AllAsReadOnly<Contest>()
+				.Include(c => c.Teams)
+					.ThenInclude(t => t.Points)
+				.Where(c => c.Id == id)
+				.FirstOrDefaultAsync();
+
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), id);
+				throw new EntityNotFoundException();
+			}
+
+			return new ContestDetailsViewModel()
+			{
+				Id = contest.Id,
+				Name = contest.Name,
+				NumberOfTeams = contest.Teams.Count(),
+				IsActive = contest.IsActive,
+				Description = contest.Description,
+				Teams = contest.Teams.Select(t => new TeamResultTableViewModel()
+				{
+					Id = t.Id,
+					Name = t.Name,
+					IsActive = t.IsActive,
+					TotalPoints = t.Points.Sum(p => p.Points)
+				})
+				.OrderBy(t => t.Name)
+			};
+		}
+
 		public async Task<ContestTableViewModel> GetContestForPreviewAsync(Guid id)
 		{
 			Contest? contest = await repository.AllAsReadOnly<Contest>()
@@ -221,6 +275,34 @@ namespace Leaderboard.Core.Services
 				Name = contest.Name,
 				NumberOfTeams = contest.Teams.Count(),
 				IsActive = contest.IsActive
+			};
+		}
+
+		public async Task<ContestLeaderboardViewModel> GetContestLeaderboardAsync(Guid id)
+		{
+			Contest? contest = await repository.AllAsReadOnly<Contest>()
+				.Include(c => c.Teams)
+					.ThenInclude(t => t.Points)
+				.Where(c => c.Id == id)
+				.FirstOrDefaultAsync();
+
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), id);
+				throw new EntityNotFoundException();
+			}
+
+			return new ContestLeaderboardViewModel()
+			{
+				Name = contest.Name,
+				NumberOfTeams = contest.Teams.Count(),
+				Description = contest.Description,
+				Teams = contest.Teams.Where(t => t.IsActive).Select(t => new TeamLeaderboardTableViewModel()
+				{
+					Name = t.Name,
+					TotalPoints = t.Points.Sum(p => p.Points)
+				})
+				.OrderByDescending(t => t.TotalPoints)
 			};
 		}
 	}

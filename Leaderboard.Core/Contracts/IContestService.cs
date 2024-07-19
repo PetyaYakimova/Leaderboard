@@ -26,5 +26,11 @@ namespace Leaderboard.Core.Contracts
         Task<ContestTableViewModel> GetContestForPreviewAsync(Guid id);
 
         Task DeleteContestAsync(Guid id);
+
+        Task<ContestDetailsViewModel> GetContestDetailsAsync(Guid id);
+
+		Task<ContestLeaderboardViewModel> GetContestLeaderboardAsync(Guid id);
+
+        Task CreateTeamAsync(TeamFormViewModel model, Guid contestId);
 	}
 }

@@ -17,5 +17,7 @@ namespace Leaderboard.Infrastructure.Data.Models
 		[Required]
 		[Comment("Can User Add Other Users In The Organization")]
 		public bool CanAddUsers { get; set; }
+
+		public IEnumerable<Point> AddedPoints { get; set; } = new List<Point>();
 	}
 }

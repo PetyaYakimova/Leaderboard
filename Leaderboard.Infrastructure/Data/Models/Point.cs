@@ -26,5 +26,10 @@ namespace Leaderboard.Infrastructure.Data.Models
 		[MaxLength(PointsDescriptionMaxLength)]
 		[Comment("Description For Giving Points")]
 		public string? Description { get; set; }
+
+		public string AddedByUserId { get; set; } = string.Empty;
+
+		[ForeignKey(nameof(AddedByUserId))]
+		public ApplicationUser AddedByUser { get; set; } = null!;
 	}
 }

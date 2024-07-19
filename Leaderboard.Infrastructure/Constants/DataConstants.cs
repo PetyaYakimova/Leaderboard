@@ -15,6 +15,9 @@
 
 		public const int TeamNotesMaxLength = 150;
 
+		public const int TeamNumberOfMembersMin = 1;
+		public const int TeamNumberOfMembersMax = 100;
+
 		public const int PointsDescriptionMaxLength = 150;
 
 		public const int UserPasswordMinLength = 8;

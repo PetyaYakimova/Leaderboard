@@ -117,16 +117,13 @@ namespace Leaderboard.Controllers
 			return RedirectToAction(nameof(All));
 		}
 
-		//TODO: Continue details view and logic
-
 		[HttpGet]
         [ContestExistsForTheUserOrganization]
         public async Task<IActionResult> Details(Guid id)
         {
-            return View();
+            var model = await contestService.GetContestDetailsAsync(id);
+            return View(model);
         }
-
-        //TOOO: After that continue with adding points, view points history and leaderboard
 
         [HttpGet]
         [AllowAnonymous]
@@ -134,7 +131,91 @@ namespace Leaderboard.Controllers
         [ContestIsActive]
         public async Task<IActionResult> Leaderboard(Guid id)
         {
-            return View(new ContestResultsViewModel());
-        }
-    }
+			var model = await contestService.GetContestLeaderboardAsync(id);
+			return View(model);
+		}
+
+		[HttpGet]
+		[ContestExistsForTheUserOrganization]
+		[ContestIsActive]
+		public IActionResult AddTeam(Guid id)
+		{
+			var model = new TeamFormViewModel();
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ContestExistsForTheUserOrganization]
+		[ContestIsActive]
+		public async Task<IActionResult> AddTeam(Guid id, TeamFormViewModel model)
+		{
+			if (ModelState.IsValid == false)
+			{
+				return View(model);
+			}
+
+			await this.contestService.CreateTeamAsync(model, id);
+
+			return RedirectToAction(nameof(Details), new { id = id });
+		}
+
+		[HttpPost]
+		[TeamExistsForTheUserOrganization]
+		public async Task<IActionResult> ChangeStatusTeam(Guid id)
+		{
+			await contestService.ChangeTeamStatusAsync(id);
+
+			var contestId = await contestService.GetContestForTeamByIdAsync(id);
+
+			return RedirectToAction(nameof(Details), new { id = contestId });
+		}
+
+		[HttpGet]
+		[TeamExistsForTheUserOrganization]
+		public async Task<IActionResult> EditTeam(Guid id)
+		{
+			TeamFormViewModel model = await contestService.GetTeamByIdAsync(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[TeamExistsForTheUserOrganization]
+		public async Task<IActionResult> EditTeam(Guid id, TeamFormViewModel model)
+		{
+			if (ModelState.IsValid == false)
+			{
+				return View(model);
+			}
+
+			await contestService.EditTeamAsync(id, model);
+
+			var contestId = await contestService.GetContestForTeamByIdAsync(id);
+
+			return RedirectToAction(nameof(Details), new { id = contestId });
+		}
+
+		[HttpGet]
+		[TeamExistsForTheUserOrganization]
+		public async Task<IActionResult> DeleteTeam(Guid id)
+		{
+			var model = await contestService.GetTeamForDeleteByIdAsync(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[TeamExistsForTheUserOrganization]
+		public async Task<IActionResult> DeleteTeam(TeamResultTableViewModel model)
+		{
+			var contestId = await contestService.GetContestForTeamByIdAsync(model.Id);
+
+			await contestService.DeleteTeamAsync(model.Id);
+
+			return RedirectToAction(nameof(Details), new { id = contestId });
+		}
+
+		//TOOO: After that continue with adding points, view points history
+	}
 }

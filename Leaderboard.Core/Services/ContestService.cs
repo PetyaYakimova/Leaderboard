@@ -1,7 +1,6 @@
 ﻿using Leaderboard.Core.Contracts;
 using Leaderboard.Core.Exceptions;
 using Leaderboard.Core.Models.Contest;
-using Leaderboard.Core.Models.Organization;
 using Leaderboard.Infrastructure.Data.Common;
 using Leaderboard.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +37,21 @@ namespace Leaderboard.Core.Services
 			}
 
 			contest.IsActive = !contest.IsActive;
+
+			await repository.SaveChangesAsync();
+		}
+
+		public async Task ChangeTeamStatusAsync(Guid id)
+		{
+			Team? team = await repository.GetByIdAsync<Team>(id);
+
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), id);
+				throw new EntityNotFoundException();
+			}
+
+			team.IsActive = !team.IsActive;
 
 			await repository.SaveChangesAsync();
 		}
@@ -152,6 +166,31 @@ namespace Leaderboard.Core.Services
 			await repository.SaveChangesAsync();
 		}
 
+		public async Task DeleteTeamAsync(Guid id)
+		{
+			var team = await repository.AllAsReadOnly<Team>()
+			   .Where(t => t.Id == id)
+			   .FirstOrDefaultAsync();
+
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), id);
+				throw new EntityNotFoundException();
+			}
+
+			List<Point> points = await repository.All<Point>()
+				.Where(p => p.TeamId == id)
+				.ToListAsync();
+
+			foreach (Point point in points)
+			{
+				await repository.DeleteAsync<Point>(point.Id);
+			}
+
+			await repository.DeleteAsync<Team>(id);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task EditContestAsync(Guid id, ContestFormViewModel model)
 		{
 			var contest = await repository.GetByIdAsync<Contest>(id);
@@ -165,6 +204,24 @@ namespace Leaderboard.Core.Services
 			contest.Name = model.Name;
 			contest.Description = model.Description;
 			contest.IsActive = model.IsActive;
+
+			await repository.SaveChangesAsync();
+		}
+
+		public async Task EditTeamAsync(Guid id, TeamFormViewModel model)
+		{
+			var team = await repository.GetByIdAsync<Team>(id);
+
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), id);
+				throw new EntityNotFoundException();
+			}
+
+			team.Name = model.Name;
+			team.Notes = model.Notes;
+			team.IsActive = model.IsActive;
+			team.NumberOfMembers = model.NumberOfMembers;
 
 			await repository.SaveChangesAsync();
 		}
@@ -278,6 +335,18 @@ namespace Leaderboard.Core.Services
 			};
 		}
 
+		public async Task<Guid> GetContestForTeamByIdAsync(Guid teamId)
+		{
+			var team = await repository.GetByIdAsync<Team>(teamId);
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), teamId);
+				throw new EntityNotFoundException();
+			}
+
+			return team.ContestId;
+		}
+
 		public async Task<ContestLeaderboardViewModel> GetContestLeaderboardAsync(Guid id)
 		{
 			Contest? contest = await repository.AllAsReadOnly<Contest>()
@@ -304,6 +373,55 @@ namespace Leaderboard.Core.Services
 				})
 				.OrderByDescending(t => t.TotalPoints)
 			};
+		}
+
+		public async Task<TeamFormViewModel> GetTeamByIdAsync(Guid id)
+		{
+			Team? team = await repository.GetByIdAsync<Team>(id);
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), id);
+				throw new EntityNotFoundException();
+			}
+
+			return new TeamFormViewModel()
+			{
+				Name = team.Name,
+				Notes = team.Notes,
+				IsActive = team.IsActive,
+				NumberOfMembers = team.NumberOfMembers
+			};
+		}
+
+		public async Task<TeamForDeleteViewModel> GetTeamForDeleteByIdAsync(Guid id)
+		{
+			var team = await repository.GetByIdAsync<Team>(id);
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), id);
+				throw new EntityNotFoundException();
+			}
+
+			return new TeamForDeleteViewModel()
+			{
+				Id = team.Id,
+				Name = team.Name,
+				ContestId = team.ContestId
+			};
+		}
+
+		public async Task<bool> TeamExistsByIdAsync(Guid teamId)
+		{
+			return await repository.AllAsReadOnly<Team>()
+				.AnyAsync(t => t.Id == teamId);
+		}
+
+		public async Task<bool> TeamExistsForOrganizationsByIdAsync(Guid teamId, Guid organizationId)
+		{
+			return await repository.AllAsReadOnly<Team>()
+				.Include(t => t.Contest)
+				.Where(t => t.Id == teamId)
+				.AnyAsync(t => t.Contest.OrganizationId == organizationId);
 		}
 	}
 }

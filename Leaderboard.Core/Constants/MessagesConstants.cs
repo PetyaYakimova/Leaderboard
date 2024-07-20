@@ -8,8 +8,11 @@
 
 		public const string StringLengthNoMoreThanValueMessage = "The {0} field must be no more than {1} characters long.";
 
-        //Logger messages
-        public const string EntityWithIdWasNotFoundLoggerErrorMessage = "{0} with id {1} was not found!";
+		public const string NumberMustBeInRangeErrorMessage = "The number must be between {1} and {2}.";
+
+		//Logger messages
+		public const string EntityWithIdWasNotFoundLoggerErrorMessage = "{0} with id {1} was not found!";
+
 		public const string CannotDeleteContestWithTeamsLoggerErrorMessage = "Cannot delete contest with teams!";
     }
 }

@@ -3,6 +3,12 @@
 	<td>@Model.Name</td>
 	<td>@Model.NumberOfTeams</td>
 	<td>
+		<form method="get">
+			<input type="submit" asp-action="Details" asp-route-id="@Model.Id" value="Details" class="link-info custominputlink" />
+		</form>
+
+	</td>
+	<td>
 		<form method="post">
 			@if (Model.IsActive)
 			{

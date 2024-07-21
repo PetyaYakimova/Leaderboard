@@ -30,14 +30,9 @@ namespace Leaderboard.Attributes
 				Guid id = new Guid();
 				if (Guid.TryParse(value.ToString(), out id))
 				{
-					if (contestService != null && contestService.ContestExistsByIdAsync(id).Result == false)
-					{
-						context.Result = new StatusCodeResult(StatusCodes.Status404NotFound);
-					}
-
 					Guid organizationId = organizationService.GetUserOrganizationIdAsync(context.HttpContext.User.Id()).Result;
 
-					if (contestService.ContestExistsForOrganizationsByIdAsync(id, organizationId).Result == false)
+					if (contestService != null && contestService.ContestExistsForOrganizationsByIdAsync(id, organizationId).Result == false)
 					{
 						context.Result = new StatusCodeResult(StatusCodes.Status404NotFound);
 					}

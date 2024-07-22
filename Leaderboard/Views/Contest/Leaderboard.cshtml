@@ -1,0 +1,37 @@
+﻿@model ContestLeaderboardViewModel
+@{
+	ViewData["Title"] = "Results for " + Model.Name;
+}
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+@if (string.IsNullOrEmpty(Model.Description) == false)
+{
+	<div class="row mb-2">
+		<label asp-for="Description" class="fw-bold me-2"></label>
+		<p>@Model.Description</p>
+	</div>
+}
+@if (Model.NumberOfTeams > 0)
+{
+	<hr />
+	<div class="table-responsive">
+		<table class="table darkbgwhitetext">
+			<thead>
+				<tr>
+					<th scope="col">Team</th>
+					<th scope="col">Total Points</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var team in Model.Teams)
+				{
+					<tr>
+						<td>@team.Name</td>
+						<td>@team.TotalPoints</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}

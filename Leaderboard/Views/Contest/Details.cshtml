@@ -1,5 +1,52 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ContestDetailsViewModel
 @{
+	ViewBag.Title = Model.Name + " - Details";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+@if (string.IsNullOrEmpty(Model.Description) == false)
+{
+	<div class="row mb-2">
+		<label asp-for="Description" class="fw-bold me-2"></label>
+		<p>@Model.Description</p>
+	</div>
+}
+@if (Model.NumberOfTeams > 0)
+{
+	<hr />
+	<h4>Teams:</h4>
+	<div class="table-responsive">
+		<table class="table darkbgwhitetext">
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Active</th>
+					<th scope="col">Total Points</th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var team in Model.Teams)
+				{
+					<partial name="_TeamTablePartial" model="@team" />
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+@if (Model.IsActive)
+{
+	<a asp-action="Leaderboard" asp-route-id="@Model.Id" class="btn btn-info mb-4 w-100 p-3 fw-bold">View Leaderboard</a>
+	<a asp-action="AddTeam" asp-route-id="@Model.Id" class="btn btn-success mb-4 w-100 p-3 fw-bold">Add Team</a>
+}
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning mb-4 w-100 p-3 fw-bold">Edit Contest</a>
+@if (Model.NumberOfTeams == 0)
+{
+	<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger mb-2 w-100 p-3 fw-bold">Delete Contest</a>
 }

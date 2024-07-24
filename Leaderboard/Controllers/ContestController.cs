@@ -135,6 +135,8 @@ namespace Leaderboard.Controllers
 			return View(model);
 		}
 
+		//TODO: Add pin contest to start for users and unpin on the home page with cards
+
 		[HttpGet]
 		[ContestExistsForTheUserOrganization]
 		[ContestIsActive]
@@ -216,6 +218,36 @@ namespace Leaderboard.Controllers
 			return RedirectToAction(nameof(Details), new { id = contestId });
 		}
 
-		//TOOO: After that continue with adding points, view points history
+
+		[HttpGet]
+		[TeamExistsForTheUserOrganization]
+		[TeamIsActive]
+		public async Task<IActionResult> AddPoints(Guid id)
+		{
+			var model = new PointFormViewModel();
+			model.TeamName = await contestService.GetTeamNameByIdAsync(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[TeamExistsForTheUserOrganization]
+		[TeamIsActive]
+		public async Task<IActionResult> AddPoints(Guid id, PointFormViewModel model)
+		{
+			var contestId = await contestService.GetContestForTeamByIdAsync(id);
+
+			if (ModelState.IsValid == false)
+			{
+				model.TeamName = await contestService.GetTeamNameByIdAsync(id);
+				return View(model);
+			}
+
+			await this.contestService.CreatePointAsync(model, id, User.Id());
+
+			return RedirectToAction(nameof(Details), new { id = contestId });
+		}
+
+		//TODO: After that continue with view points history
 	}
 }

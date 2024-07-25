@@ -248,6 +248,24 @@ namespace Leaderboard.Controllers
 			return RedirectToAction(nameof(Details), new { id = contestId });
 		}
 
-		//TODO: After that continue with view points history
+		[HttpGet]
+		[TeamExistsForTheUserOrganization]
+		public async Task<IActionResult> ViewPointsHistory(Guid id, [FromQuery] AllPointsQueryModel query)
+		{
+			var model = await contestService.GetAllTeamPointsAsync(
+				id,
+				query.SearchTerm,
+				query.SearchPoints,
+				query.SearchUserEmail,
+				query.CurrentPage,
+				query.ItemsPerPage);
+
+			query.TotalItemCount = model.TotalCount;
+			query.Entities = model.Entities;
+
+			query.TeamName = await contestService.GetTeamNameByIdAsync(id);
+
+			return View(query);
+		}
 	}
 }

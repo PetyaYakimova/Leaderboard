@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using static Leaderboard.Core.Constants.MessagesConstants;
 using static Leaderboard.Core.Constants.LimitConstants;
+using Leaderboard.Core.Models.Organization;
 
 namespace Leaderboard.Core.Services
 {
@@ -121,6 +122,32 @@ namespace Leaderboard.Core.Services
 			return contest.Id;
 		}
 
+		public async Task CreatePointAsync(PointFormViewModel model, Guid teamId, string userId)
+		{
+			if (await this.TeamExistsByIdAsync(teamId) == false)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), teamId);
+				throw new EntityNotFoundException();
+			}
+
+			if (await repository.AllAsReadOnly<ApplicationUser>().AnyAsync(u => u.Id == userId) == false)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(ApplicationUser), userId);
+				throw new EntityNotFoundException();
+			}
+
+			Point point = new Point()
+			{
+				AddedByUserId = userId,
+				Description = model.Description,
+				Points = model.Points,
+				TeamId = teamId
+			};
+
+			await repository.AddAsync(point);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task CreateTeamAsync(TeamFormViewModel model, Guid contestId)
 		{
 			if (await this.ContestExistsByIdAsync(contestId) == false)
@@ -147,6 +174,7 @@ namespace Leaderboard.Core.Services
 		{
 			var contest = await repository.AllAsReadOnly<Contest>()
 			   .Include(c => c.Teams)
+			   .Include(c => c.PinnedByUsers)
 			   .Where(c => c.Id == id)
 			   .FirstOrDefaultAsync();
 
@@ -160,6 +188,16 @@ namespace Leaderboard.Core.Services
 			{
 				logger.LogError(CannotDeleteContestWithTeamsLoggerErrorMessage);
 				throw new CannotDeleteEntityException();
+			}
+
+			List<PinnedContest> pins = await repository.All<PinnedContest>()
+				.Where(p => p.ContestId == id)
+				.ToListAsync();
+
+			//TODO: If this works - use it when deleting points for a team as well
+			if (pins.Any())
+			{
+				repository.DeleteRange(pins);
 			}
 
 			await repository.DeleteAsync<Contest>(id);
@@ -261,6 +299,48 @@ namespace Leaderboard.Core.Services
 			{
 				TotalCount = totalContestsToShow,
 				Entities = contests
+			};
+		}
+
+		public async Task<PointsQueryServiceModel> GetAllTeamPointsAsync(Guid teamId, string? searchedTerm = null, int? searchedPoints = null, string? searchedUserEmail = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage)
+		{
+			var pointsToShow = repository.AllAsReadOnly<Point>()
+				.Where(p => p.TeamId == teamId);
+
+			if (searchedTerm != null)
+			{
+				string normalizedSearchTerm = searchedTerm.ToLower();
+				pointsToShow = pointsToShow.Where(p => p.Description != null && p.Description.ToLower().Contains(normalizedSearchTerm));
+			}
+
+			if (searchedPoints != null)
+			{
+				pointsToShow = pointsToShow.Where(p => p.Points == searchedPoints);
+			}
+
+			if (searchedUserEmail != null)
+			{
+				string normalizedEmail = searchedUserEmail.ToLower();
+				pointsToShow = pointsToShow.Where(p => p.AddedByUser.Email.ToLower().Contains(normalizedEmail));
+			}
+
+			var points = await pointsToShow
+				.OrderByDescending(p => p.Id)
+				.Skip((currentPage - 1) * itemsPerPage)
+				.Take(itemsPerPage)
+				.Select(p => new PointTableViewModel()
+				{
+					Description = p.Description,
+					Points = p.Points,
+					AddedByUserWithEmail = p.AddedByUser.Email
+				}).ToListAsync();
+
+			int totalPointsToShow = await pointsToShow.CountAsync();
+
+			return new PointsQueryServiceModel()
+			{
+				TotalCount = totalPointsToShow,
+				Entities = points
 			};
 		}
 
@@ -410,6 +490,55 @@ namespace Leaderboard.Core.Services
 			};
 		}
 
+		public async Task<string> GetTeamNameByIdAsync(Guid id)
+		{
+			Team? team = await repository.GetByIdAsync<Team>(id);
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), id);
+				throw new EntityNotFoundException();
+			}
+
+			return team.Name;
+		}
+
+		public async Task PinContestForUser(Guid contestId, string userId)
+		{
+			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
+
+			if (user == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(ApplicationUser), userId);
+				throw new EntityNotFoundException();
+			}
+
+			var contest = await repository.AllAsReadOnly<Contest>()
+				.Include(c => c.PinnedByUsers)
+				.Where(c => c.Id == contestId)
+				.FirstOrDefaultAsync();
+
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), contestId);
+				throw new EntityNotFoundException();
+			}
+
+			if (contest.PinnedByUsers.Any(p => p.UserId == userId))
+			{
+				logger.LogError(ContestIsAlreadyPinnedForThisUserLoggerErrorMessage);
+				throw new InvalidOperationException();
+			}
+
+			PinnedContest pinnedContest = new PinnedContest()
+			{
+				UserId = userId,
+				ContestId = contestId
+			};
+
+			await repository.AddAsync(pinnedContest);
+			await repository.SaveChangesAsync();
+		}
+
 		public async Task<bool> TeamExistsByIdAsync(Guid teamId)
 		{
 			return await repository.AllAsReadOnly<Team>()
@@ -422,6 +551,50 @@ namespace Leaderboard.Core.Services
 				.Include(t => t.Contest)
 				.Where(t => t.Id == teamId)
 				.AnyAsync(t => t.Contest.OrganizationId == organizationId);
+		}
+
+		public async Task<bool> TeamIsActiveAsync(Guid id)
+		{
+			var team = await repository.GetByIdAsync<Team>(id);
+
+			if (team == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), id);
+				throw new EntityNotFoundException();
+			}
+
+			return team.IsActive;
+		}
+
+		public async Task UnpinContestForUser(Guid contestId, string userId)
+		{
+			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
+
+			if (user == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(ApplicationUser), userId);
+				throw new EntityNotFoundException();
+			}
+
+			var contest = await repository.GetByIdAsync<Contest>(contestId);
+
+			if (contest == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Contest), contestId);
+				throw new EntityNotFoundException();
+			}
+
+			var pinnedContest = await repository.AllAsReadOnly<PinnedContest>()
+				.Where(p => p.UserId == userId)
+				.FirstOrDefaultAsync(p => p.ContestId == contestId);
+
+			if (pinnedContest == null)
+			{
+				logger.LogError(ContestIsIsNotPinnedForThisUserLoggerErrorMessage);
+				throw new InvalidOperationException();
+			}
+
+			repository.Delete<PinnedContest>(pinnedContest);
 		}
 	}
 }

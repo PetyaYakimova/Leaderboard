@@ -1,4 +1,5 @@
 ﻿using Leaderboard.Core.Models.Contest;
+using Leaderboard.Core.Models.Organization;
 using static Leaderboard.Core.Constants.LimitConstants;
 
 namespace Leaderboard.Core.Contracts
@@ -31,6 +32,10 @@ namespace Leaderboard.Core.Contracts
 
 		Task<ContestLeaderboardViewModel> GetContestLeaderboardAsync(Guid id);
 
+		Task PinContestForUser(Guid contestId, string userId);
+
+		Task UnpinContestForUser(Guid contestId, string userId);
+
 		Task CreateTeamAsync(TeamFormViewModel model, Guid contestId);
 
 		Task<bool> TeamExistsByIdAsync(Guid teamId);
@@ -48,5 +53,13 @@ namespace Leaderboard.Core.Contracts
 		Task DeleteTeamAsync(Guid id);
 
 		Task<TeamForDeleteViewModel> GetTeamForDeleteByIdAsync(Guid id);
+
+		Task<bool> TeamIsActiveAsync(Guid id);
+
+		Task CreatePointAsync(PointFormViewModel model, Guid teamId, string userId);
+
+		Task<string> GetTeamNameByIdAsync(Guid id);
+
+		Task<PointsQueryServiceModel> GetAllTeamPointsAsync(Guid teamId, string? searchedTerm = null, int? searchedPoints = null, string? searchedUserEmail = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
 	}
 }

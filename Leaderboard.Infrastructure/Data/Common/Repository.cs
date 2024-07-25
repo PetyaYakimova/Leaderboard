@@ -50,5 +50,15 @@ namespace Leaderboard.Infrastructure.Data.Common
 				DbSet<T>().Remove(entity);
 			}
 		}
+
+		public void Delete<T>(T entity) where T : class
+		{
+			DbSet<T>().Remove(entity);
+		}
+
+		public void DeleteRange<T>(IEnumerable<T> entities) where T : class
+		{
+			DbSet<T>().RemoveRange(entities);
+		}
 	}
 }

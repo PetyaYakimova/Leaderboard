@@ -1,0 +1,78 @@
+﻿@model PinnedContestsViewModel
+@{
+	ViewBag.Title = "Pinned Contests";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+@if (!Model.PinnedContests.Any())
+{
+	<div class="customNoResultsFoundMessage">
+		<h3 class="text-center text-warning">You have no pinned contests. Pin the contest you want to see on this page.</h3>
+	</div>
+}
+else
+{
+	<div class="card-deck d-flex justify-content-around">
+		@foreach (var contest in Model.PinnedContests)
+		{
+			<div class="card text-center text-white bg-dark border-light mb-3" style="min-width: 18rem;">
+				<div class="card-body">
+					<h4 class="card-title">@contest.Name</h4>
+					<p class="card-text">Teams: @contest.NumberOfTeams</p>
+					@if (contest.IsActive)
+					{
+						<p class="card-text text-success">Active</p>
+					}
+					else
+					{
+						<p class="card-text text-danger">Inactive</p>
+
+					}
+					<form method="get">
+						<input type="submit" asp-action="Leaderboard" asp-route-id="@contest.Id" value="Leaderboard" class="link-success custominputlink" />
+					</form>
+					<form method="get">
+						<input type="submit" asp-action="Details" asp-route-id="@contest.Id" value="Details" class="link-info custominputlink" />
+					</form>
+					<form method="post">
+						<input type="submit" asp-action="Unpin" asp-route-id="@contest.Id" value="Unpin" class="link-warning custominputlink" />
+					</form>
+				</div>
+			</div>
+		}
+	</div>
+}
+
+<hr />
+@if (Model.UnpinnedActiveContests.Any())
+{
+	<div class="table-responsive">
+		<table class="table darkbgwhitetext">
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var contest in Model.UnpinnedActiveContests)
+				{
+					<tr>
+						<td>@contest.Name</td>
+						<td>
+							<form method="post">
+								<input type="submit" asp-action="Pin" asp-route-id="@contest.Id" value="Pin" class="link-info custominputlink" />
+							</form>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+else
+{
+	<a asp-action="Add" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Add Contest</a>
+}

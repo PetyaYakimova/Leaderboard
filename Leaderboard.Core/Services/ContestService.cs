@@ -393,7 +393,7 @@ namespace Leaderboard.Core.Services
 			};
 		}
 
-		public async Task<ContestTableViewModel> GetContestForPreviewAsync(Guid id)
+		public async Task<ContestForPreviewViewModel> GetContestForPreviewAsync(Guid id)
 		{
 			Contest? contest = await repository.AllAsReadOnly<Contest>()
 				.Include(c => c.Teams)
@@ -406,12 +406,10 @@ namespace Leaderboard.Core.Services
 				throw new EntityNotFoundException();
 			}
 
-			return new ContestTableViewModel()
+			return new ContestForPreviewViewModel()
 			{
 				Id = contest.Id,
-				Name = contest.Name,
-				NumberOfTeams = contest.Teams.Count(),
-				IsActive = contest.IsActive
+				Name = contest.Name
 			};
 		}
 
@@ -502,6 +500,44 @@ namespace Leaderboard.Core.Services
 			return team.Name;
 		}
 
+		public async Task<PinnedContestsViewModel> GetUserPinnedAndUnpinnedContests(string userId)
+		{
+			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
+
+			if (user == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(ApplicationUser), userId);
+				throw new EntityNotFoundException();
+			}
+
+			var pinnedContests = await repository.AllAsReadOnly<Contest>()
+				.Where(c => c.PinnedByUsers.Any(u => u.UserId == userId))
+				.Select(c => new ContestTableViewModel()
+				{
+					Id = c.Id,
+					Name = c.Name,
+					IsActive = c.IsActive,
+					NumberOfTeams = c.Teams.Count()
+				}).ToListAsync();
+
+			Guid organizationId = await organizationService.GetUserOrganizationIdAsync(userId);
+			var unpinnedContests = await repository.AllAsReadOnly<Contest>()
+				.Where(c => c.OrganizationId == organizationId)
+				.Where(c => !c.PinnedByUsers.Any(u => u.UserId == userId))
+				.Where(c => c.IsActive)
+				.Select(c => new ContestForPreviewViewModel()
+				{
+					Id = c.Id,
+					Name = c.Name
+				}).ToListAsync();
+
+			return new PinnedContestsViewModel()
+			{
+				PinnedContests = pinnedContests,
+				UnpinnedActiveContests = unpinnedContests
+			};
+		}
+
 		public async Task PinContestForUser(Guid contestId, string userId)
 		{
 			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
@@ -526,6 +562,12 @@ namespace Leaderboard.Core.Services
 			if (contest.PinnedByUsers.Any(p => p.UserId == userId))
 			{
 				logger.LogError(ContestIsAlreadyPinnedForThisUserLoggerErrorMessage);
+				throw new InvalidOperationException();
+			}
+
+			if (contest.IsActive == false)
+			{
+				logger.LogError(ContestCannotBePinnedBecauseItIsInactiveLoggerErrorMessage);
 				throw new InvalidOperationException();
 			}
 
@@ -595,6 +637,7 @@ namespace Leaderboard.Core.Services
 			}
 
 			repository.Delete<PinnedContest>(pinnedContest);
+			await repository.SaveChangesAsync();
 		}
 	}
 }

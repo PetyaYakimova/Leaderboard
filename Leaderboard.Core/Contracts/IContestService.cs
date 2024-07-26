@@ -24,7 +24,7 @@ namespace Leaderboard.Core.Contracts
 
 		Task<bool> ContestHasNoTeamsAsync(Guid id);
 
-		Task<ContestTableViewModel> GetContestForPreviewAsync(Guid id);
+		Task<ContestForPreviewViewModel> GetContestForPreviewAsync(Guid id);
 
 		Task DeleteContestAsync(Guid id);
 
@@ -61,5 +61,7 @@ namespace Leaderboard.Core.Contracts
 		Task<string> GetTeamNameByIdAsync(Guid id);
 
 		Task<PointsQueryServiceModel> GetAllTeamPointsAsync(Guid teamId, string? searchedTerm = null, int? searchedPoints = null, string? searchedUserEmail = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
+
+		Task<PinnedContestsViewModel> GetUserPinnedAndUnpinnedContests(string userId);
 	}
 }

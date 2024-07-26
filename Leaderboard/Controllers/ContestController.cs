@@ -25,7 +25,16 @@ namespace Leaderboard.Controllers
             this.contestService = contestService;
         }
 
-        [HttpGet]
+		[HttpGet]
+		public async Task<IActionResult> Pinned()
+		{
+			string userId = User.Id();
+			var model = await contestService.GetUserPinnedAndUnpinnedContests(userId);
+
+			return View(model);
+		}
+
+		[HttpGet]
         public async Task<IActionResult> All([FromQuery] AllContestsQueryModel query)
         {
             Guid organizationId = await organizationService.GetUserOrganizationIdAsync(User.Id());
@@ -110,7 +119,7 @@ namespace Leaderboard.Controllers
 		[HttpPost]
 		[ContestExistsForTheUserOrganization]
 		[ContestHasNoTeams]
-		public async Task<IActionResult> Delete(ContestTableViewModel model)
+		public async Task<IActionResult> Delete(ContestForPreviewViewModel model)
 		{
 			await contestService.DeleteContestAsync(model.Id);
 
@@ -133,6 +142,23 @@ namespace Leaderboard.Controllers
         {
 			var model = await contestService.GetContestLeaderboardAsync(id);
 			return View(model);
+		}
+
+		[HttpPost]
+		[ContestExistsForTheUserOrganization]
+		[ContestIsActive]
+		public async Task<IActionResult> Pin(Guid id)
+		{
+			await contestService.PinContestForUser(id, User.Id());
+			return RedirectToAction(nameof(Pinned));
+		}
+
+		[HttpPost]
+		[ContestExistsForTheUserOrganization]
+		public async Task<IActionResult> Unpin(Guid id)
+		{
+			await contestService.UnpinContestForUser(id, User.Id());
+			return RedirectToAction(nameof(Pinned));
 		}
 
 		//TODO: Add pin contest to start for users and unpin on the home page with cards

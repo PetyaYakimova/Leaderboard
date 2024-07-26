@@ -14,5 +14,11 @@
 		public const string EntityWithIdWasNotFoundLoggerErrorMessage = "{0} with id {1} was not found!";
 
 		public const string CannotDeleteContestWithTeamsLoggerErrorMessage = "Cannot delete contest with teams!";
-    }
+
+		public const string ContestIsAlreadyPinnedForThisUserLoggerErrorMessage = "Contest is already pinned for this user!";
+
+		public const string ContestIsIsNotPinnedForThisUserLoggerErrorMessage = "Contest cannot be unpinned since it is not pinned for this user!";
+
+		public const string ContestCannotBePinnedBecauseItIsInactiveLoggerErrorMessage = "Contest is inactive and so it cannot be pinned!";
+	}
 }

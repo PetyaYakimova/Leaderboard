@@ -19,5 +19,7 @@ namespace Leaderboard.Infrastructure.Data.Models
 		public bool CanAddUsers { get; set; }
 
 		public IEnumerable<Point> AddedPoints { get; set; } = new List<Point>();
+
+		public IEnumerable<PinnedContest> PinnedContests { get; set; } = new List<PinnedContest>();
 	}
 }

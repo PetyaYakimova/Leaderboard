@@ -20,6 +20,9 @@
 
 		public const int PointsDescriptionMaxLength = 150;
 
+		public const int PointsMin = -500;
+		public const int PointsMax = 500;
+
 		public const int UserPasswordMinLength = 8;
 		public const int UserPasswordMaxLength = 100;
 	}

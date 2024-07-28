@@ -30,7 +30,7 @@ namespace Leaderboard.Attributes
 				{
 					if (contestService != null && contestService.ContestIsActiveAsync(id).Result == false)
 					{
-						context.Result = new StatusCodeResult(StatusCodes.Status404NotFound);
+						context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
 					}
 				}
 				else

@@ -27,6 +27,7 @@ namespace Leaderboard.Infrastructure.Data.Models
 		[Comment("Description For Giving Points")]
 		public string? Description { get; set; }
 
+		[Required]
 		public string AddedByUserId { get; set; } = string.Empty;
 
 		[ForeignKey(nameof(AddedByUserId))]

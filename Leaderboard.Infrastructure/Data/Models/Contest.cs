@@ -33,5 +33,8 @@ namespace Leaderboard.Infrastructure.Data.Models
 		public Organization Organization { get; set; } = null!;
 
 		public IEnumerable<Team> Teams { get; set; } = new List<Team>();
+
+
+		public IEnumerable<PinnedContest> PinnedByUsers { get; set; } = new List<PinnedContest>();
 	}
 }

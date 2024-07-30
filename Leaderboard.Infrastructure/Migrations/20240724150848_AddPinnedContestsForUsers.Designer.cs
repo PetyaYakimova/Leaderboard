@@ -4,6 +4,7 @@ using Leaderboard.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Leaderboard.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaderboardDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240724150848_AddPinnedContestsForUsers")]
+    partial class AddPinnedContestsForUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,7 +129,7 @@ namespace Leaderboard.Infrastructure.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Contests", (string)null);
+                    b.ToTable("Contests");
 
                     b.HasComment("Contests");
                 });
@@ -147,7 +149,7 @@ namespace Leaderboard.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organizations", (string)null);
+                    b.ToTable("Organizations");
 
                     b.HasComment("Organizations");
                 });
@@ -166,7 +168,7 @@ namespace Leaderboard.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PinnedContest", (string)null);
+                    b.ToTable("PinnedContest");
 
                     b.HasComment("Pinned Contests For Users");
                 });
@@ -203,7 +205,7 @@ namespace Leaderboard.Infrastructure.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("Points", (string)null);
+                    b.ToTable("Points");
 
                     b.HasComment("Point For All Teams");
                 });
@@ -242,7 +244,7 @@ namespace Leaderboard.Infrastructure.Migrations
 
                     b.HasIndex("ContestId");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("Teams");
 
                     b.HasComment("Teams");
                 });

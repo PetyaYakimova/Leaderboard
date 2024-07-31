@@ -1,4 +1,4 @@
-﻿@model ContestTableViewModel
+﻿@model ContestForPreviewViewModel
 
 @{
 	ViewBag.Title = @Model.Name + " - Delete";
@@ -19,8 +19,6 @@
 			<form asp-action="Delete" method="post">
 				<input type="hidden" asp-for="@Model.Id" />
 				<input type="hidden" asp-for="@Model.Name" />
-				<input type="hidden" asp-for="@Model.NumberOfTeams" />
-				<input type="hidden" asp-for="@Model.IsActive" />
 				<input type="submit" value="Delete" class="btn btn-danger mb-2 w-100 p-3 fw-bold" />
 			</form>
 		</div>

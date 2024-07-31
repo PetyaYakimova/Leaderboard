@@ -1,0 +1,12 @@
+﻿@model PointFormViewModel
+@{
+	ViewBag.Title = "Add points for team " + Model.TeamName;
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<partial name="_PointFormPartial" model="@Model" />
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

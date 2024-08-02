@@ -19,9 +19,12 @@
 	</td>
 	<td>@Model.TotalPoints</td>
 	<td>
-		<form method="get">
-			<input type="submit" asp-action="AddPoints" asp-route-id="@Model.Id" value="Add Points" class="link-success custominputlink" />
-		</form>
+		@if (@Model.IsActive)
+		{
+			<form method="get">
+				<input type="submit" asp-action="AddPoints" asp-route-id="@Model.Id" value="Add Points" class="link-success custominputlink" />
+			</form>
+		}
 	</td>
 	<td>
 		<form method="get">

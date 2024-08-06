@@ -23,4 +23,12 @@
     <ProjectReference Include="..\Leaderboard.Core\Leaderboard.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Contest\Pinned.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Contest\Pinned.cshtml" />
+  </ItemGroup>
+
 </Project>

@@ -30,14 +30,10 @@ else
 						<p class="card-text text-danger">Inactive</p>
 
 					}
-					<form method="get">
-						<input type="submit" asp-action="Leaderboard" asp-route-id="@contest.Id" value="Leaderboard" class="link-success custominputlink" />
-					</form>
-					<form method="get">
-						<input type="submit" asp-action="Details" asp-route-id="@contest.Id" value="Details" class="link-info custominputlink" />
-					</form>
+					<a asp-action="Leaderboard" asp-route-id="@contest.Id" class="btn btn-info mb-2 w-50 p-1 fw-bold">Leaderboard</a>
+					<a asp-action="Details" asp-route-id="@contest.Id" class="btn btn-success mb-2 w-50 p-1 fw-bold">Details</a>
 					<form method="post">
-						<input type="submit" asp-action="Unpin" asp-route-id="@contest.Id" value="Unpin" class="link-warning custominputlink" />
+						<input type="submit" asp-action="Unpin" asp-route-id="@contest.Id" value="Unpin" class="btn btn-warning mb-2 w-50 p-1 fw-bold" />
 					</form>
 				</div>
 			</div>
@@ -52,7 +48,7 @@ else
 		<table class="table darkbgwhitetext">
 			<thead>
 				<tr>
-					<th scope="col">Name</th>
+					<th scope="col">Not-pinned contests</th>
 					<th scope="col"></th>
 				</tr>
 			</thead>

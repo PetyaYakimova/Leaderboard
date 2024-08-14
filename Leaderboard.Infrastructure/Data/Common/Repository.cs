@@ -16,6 +16,11 @@ namespace Leaderboard.Infrastructure.Data.Common
 			return context.Set<T>();
 		}
 
+		public async Task AddAsync<T>(T entity) where T : class
+		{
+			await DbSet<T>().AddAsync(entity);
+		}
+
 		public IQueryable<T> All<T>() where T : class
 		{
 			return DbSet<T>();
@@ -24,16 +29,6 @@ namespace Leaderboard.Infrastructure.Data.Common
 		public IQueryable<T> AllAsReadOnly<T>() where T : class
 		{
 			return DbSet<T>().AsNoTracking();
-		}
-
-		public async Task AddAsync<T>(T entity) where T : class
-		{
-			await DbSet<T>().AddAsync(entity);
-		}
-
-		public async Task<int> SaveChangesAsync()
-		{
-			return await context.SaveChangesAsync();
 		}
 
 		public async Task<T?> GetByIdAsync<T>(object id) where T : class
@@ -59,6 +54,11 @@ namespace Leaderboard.Infrastructure.Data.Common
 		public void DeleteRange<T>(IEnumerable<T> entities) where T : class
 		{
 			DbSet<T>().RemoveRange(entities);
+		}
+
+		public async Task<int> SaveChangesAsync()
+		{
+			return await context.SaveChangesAsync();
 		}
 	}
 }

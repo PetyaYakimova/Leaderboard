@@ -6,8 +6,8 @@ using Leaderboard.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using static Leaderboard.Core.Constants.MessagesConstants;
 using static Leaderboard.Core.Constants.LimitConstants;
+using static Leaderboard.Core.Constants.MessagesConstants;
 
 namespace Leaderboard.Core.Services
 {
@@ -22,6 +22,20 @@ namespace Leaderboard.Core.Services
 		{
 			this.logger = logger;
 			this.repository = repository;
+		}
+
+		public async Task<Guid> CreateOrganizationAsync(string organizationName)
+		{
+			Organization organization = new Organization()
+			{
+				Id = Guid.NewGuid(),
+				Name = organizationName
+			};
+
+			await repository.AddAsync(organization);
+			await repository.SaveChangesAsync();
+
+			return organization.Id;
 		}
 
 		public async Task AddUserAsync(UserFormViewModel model, Guid organizationId)
@@ -51,30 +65,47 @@ namespace Leaderboard.Core.Services
 			await repository.SaveChangesAsync();
 		}
 
-		public async Task<bool> CanUserAddUsersAsync(string userId)
+		public async Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId)
 		{
-			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
+			var model = await repository.AllAsReadOnly<Organization>()
+				.Where(o => o.Id == organizationId)
+				.Include(o => o.Users)
+				.Include(o => o.Contests)
+				.Select(o => new OrganizationPreviewModel()
+				{
+					Id = o.Id,
+					Name = o.Name,
+					NumberOfAdministrators = o.Users.Count(),
+					NumberOfContests = o.Contests.Count()
+				}).FirstOrDefaultAsync();
+
+			if (model == null)
+			{
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Organization), organizationId);
+				throw new EntityNotFoundException();
+			}
+
+			return model;
+		}
+
+		public async Task<bool> OrganizationExistsByIdAsync(Guid organizationId)
+		{
+			return await repository.AllAsReadOnly<Organization>()
+				.AnyAsync(o => o.Id == organizationId);
+		}
+
+		public async Task<Guid> GetUserOrganizationIdAsync(string userId)
+		{
+			var user = await repository.AllAsReadOnly<ApplicationUser>()
+				.FirstOrDefaultAsync(u => u.Id == userId);
 
 			if (user == null)
 			{
-				return false;
+				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(ApplicationUser), userId);
+				throw new EntityNotFoundException();
 			}
 
-			return user.CanAddUsers;
-		}
-
-		public async Task<Guid> CreateOrganizationAsync(string organizationName)
-		{
-			Organization organization = new Organization()
-			{
-				Id = Guid.NewGuid(),
-				Name = organizationName
-			};
-
-			await repository.AddAsync(organization);
-			await repository.SaveChangesAsync();
-
-			return organization.Id;
+			return user.OrganizationId;
 		}
 
 		public async Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchTerm = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage)
@@ -107,47 +138,16 @@ namespace Leaderboard.Core.Services
 			};
 		}
 
-		public async Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId)
+		public async Task<bool> CanUserAddUsersAsync(string userId)
 		{
-			var model = await repository.AllAsReadOnly<Organization>()
-				.Where(o => o.Id == organizationId)
-				.Include(o => o.Users)
-				.Include(o => o.Contests)
-				.Select(o => new OrganizationPreviewModel()
-				{
-					Id = o.Id,
-					Name = o.Name,
-					NumberOfAdministrators = o.Users.Count(),
-					NumberOfContests = o.Contests.Count()
-				}).FirstOrDefaultAsync();
-
-			if (model == null)
-			{
-				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Organization), organizationId);
-				throw new EntityNotFoundException();
-			}
-
-			return model;
-		}
-
-		public async Task<Guid> GetUserOrganizationIdAsync(string userId)
-		{
-			var user = await repository.AllAsReadOnly<ApplicationUser>()
-				.FirstOrDefaultAsync(u => u.Id == userId);
+			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
 
 			if (user == null)
 			{
-				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(ApplicationUser), userId);
-				throw new EntityNotFoundException();
+				return false;
 			}
 
-			return user.OrganizationId;
-		}
-
-		public async Task<bool> OrganizationExistsByIdAsync(Guid organizationId)
-		{
-			return await repository.AllAsReadOnly<Organization>()
-				.AnyAsync(o => o.Id == organizationId);
+			return user.CanAddUsers;
 		}
 	}
 }

@@ -4,7 +4,8 @@ using static Leaderboard.Core.Constants.LimitConstants;
 namespace Leaderboard.Core.Models.BaseModels
 {
 	/// <summary>
-	/// A base class for all models used to get filtering criteria and pagination info. No added validation attributes.
+	/// A base class for all models used to get filtering criteria and pagination info. 
+	/// No added validation attributes.
 	/// </summary>
 	/// <typeparam name="Т">Type of model entities</typeparam>
 	public abstract class AllEntitiesQueryBaseModel<T>

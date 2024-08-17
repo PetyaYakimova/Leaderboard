@@ -1,6 +1,10 @@
 namespace Leaderboard.Models
 {
-    public class ErrorViewModel
+	/// <summary>
+	/// An error view model. 
+	/// No added validation attributes.
+	/// </summary>
+	public class ErrorViewModel
     {
         public string? RequestId { get; set; }
 

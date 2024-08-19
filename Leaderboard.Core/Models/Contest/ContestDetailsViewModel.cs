@@ -1,7 +1,8 @@
 ﻿namespace Leaderboard.Core.Models.Contest
 {
 	/// <summary>
-	/// View model only for previewing contests in details. No added validation attributes.
+	/// View model only for previewing contests in details. 
+	/// No added validation attributes.
 	/// </summary>
 	public class ContestDetailsViewModel : ContestTableViewModel
 	{

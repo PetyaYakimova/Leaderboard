@@ -5,7 +5,8 @@ using static Leaderboard.Core.Constants.MessagesConstants;
 namespace Leaderboard.Core.Models.Contest
 {
 	/// <summary>
-	/// A view model for the form when editing and creating a contest. Added validation attributes.
+	/// A view model for the form when editing and creating a contest. 
+	/// Added validation attributes.
 	/// </summary>
 	public class ContestFormViewModel
 	{

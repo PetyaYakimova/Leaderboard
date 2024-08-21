@@ -1,7 +1,8 @@
 ﻿namespace Leaderboard.Core.Models.Organization
 {
 	/// <summary>
-	/// View model only for previewing users in a table. No added validation attributes.
+	/// View model only for previewing users in a table. 
+	/// No added validation attributes.
 	/// </summary>
 	public class UserTableViewModel
 	{

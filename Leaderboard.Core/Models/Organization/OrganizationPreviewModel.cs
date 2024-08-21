@@ -3,7 +3,8 @@
 namespace Leaderboard.Core.Models.Organization
 {
     /// <summary>
-    /// View model only for displaying the information for the organization. No added validation attributes.
+    /// View model only for displaying the information for the organization. 
+    /// No added validation attributes.
     /// </summary>
     public class OrganizationPreviewModel
     {

@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Leaderboard.Core.Models.Contest
 {
 	/// <summary>
-	/// A view model for the form when adding points for a team. Added validation attributes.
+	/// A view model for the form when adding points for a team. 
+	/// Added validation attributes.
 	/// </summary>
 	public class PointFormViewModel
 	{

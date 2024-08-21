@@ -1,7 +1,8 @@
 ﻿namespace Leaderboard.Core.Models.Contest
 {
 	/// <summary>
-	/// View model only for previewing points for a team in a table. No added validation attributes.
+	/// View model only for previewing points for a team in a table. 
+	/// No added validation attributes.
 	/// </summary>
 	public class PointTableViewModel
 	{

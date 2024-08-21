@@ -5,7 +5,8 @@ using static Leaderboard.Core.Constants.MessagesConstants;
 namespace Leaderboard.Core.Models.Organization
 {
 	/// <summary>
-	/// A view model for the form when creating users. Added validation attributes.
+	/// A view model for the form when creating users. 
+	/// Added validation attributes.
 	/// </summary>
 	public class UserFormViewModel
 	{

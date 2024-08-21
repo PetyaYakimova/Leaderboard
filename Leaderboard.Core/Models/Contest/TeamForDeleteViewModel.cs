@@ -1,7 +1,8 @@
 ﻿namespace Leaderboard.Core.Models.Contest
 {
 	/// <summary>
-	/// View model only for previewing team before deletion. No added validation attributes.
+	/// View model only for previewing team before deletion. 
+	/// No added validation attributes.
 	/// </summary>
 	public class TeamForDeleteViewModel
 	{

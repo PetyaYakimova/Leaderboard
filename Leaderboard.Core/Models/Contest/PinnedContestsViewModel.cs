@@ -1,7 +1,8 @@
 ﻿namespace Leaderboard.Core.Models.Contest
 {
 	/// <summary>
-	/// A view model only for displaying the pinned contests and adding option to pin unpinned contest. No added validation attributes.
+	/// A view model only for displaying the pinned contests and adding option to pin unpinned contest. 
+	/// No added validation attributes.
 	/// </summary>
 	public class PinnedContestsViewModel
 	{

@@ -20,5 +20,7 @@
 		public const string ContestIsIsNotPinnedForThisUserLoggerErrorMessage = "Contest cannot be unpinned since it is not pinned for this user!";
 
 		public const string ContestCannotBePinnedBecauseItIsInactiveLoggerErrorMessage = "Contest is inactive and so it cannot be pinned!";
+
+		public const string ContestCannotBePinnedBecauseItIsInAnotherOrganizationLoggerErrorMessage = "Contest is not in the user organization!";
 	}
 }

@@ -72,6 +72,12 @@ namespace Leaderboard.Core.Services
 				throw new EntityNotFoundException();
 			}
 
+			if (contest.OrganizationId != user.OrganizationId)
+			{
+				logger.LogError(ContestCannotBePinnedBecauseItIsInAnotherOrganizationLoggerErrorMessage);
+				throw new InvalidOperationException();
+			}
+
 			if (contest.PinnedByUsers.Any(p => p.UserId == userId))
 			{
 				logger.LogError(ContestIsAlreadyPinnedForThisUserLoggerErrorMessage);

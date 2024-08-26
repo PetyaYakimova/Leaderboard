@@ -7,6 +7,13 @@ namespace Leaderboard.Core.Contracts
 	{
 		//Create
 		#region
+		/// <summary>
+		/// Creates a contest in the given organization. 
+		/// If hte organization doesn't exist - an exception is thrown.
+		/// </summary>
+		/// <param name="model">Contest form view model</param>
+		/// <param name="organizationId">The organization id for the organization the contest is in</param>
+		/// <returns>The id of the new contest</returns>
 		Task<Guid> CreateContestAsync(ContestFormViewModel model, Guid organizationId);
 
 		Task PinContestForUser(Guid contestId, string userId);

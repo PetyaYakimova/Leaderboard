@@ -47,6 +47,11 @@ namespace Leaderboard.Core.Contracts
 
 		//Read
 		#region
+		/// <summary>
+		/// Check if a contest with the given id exists.
+		/// </summary>
+		/// <param name="contestId">Id of the contest</param>
+		/// <returns></returns>
 		Task<bool> ContestExistsByIdAsync(Guid contestId);
 
 		Task<bool> ContestExistsForOrganizationsByIdAsync(Guid contestId, Guid organizationId);

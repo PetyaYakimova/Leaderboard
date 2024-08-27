@@ -9,7 +9,7 @@ namespace Leaderboard.Core.Contracts
 		#region
 		/// <summary>
 		/// Creates a contest in the given organization. 
-		/// If hte organization doesn't exist - an EntityNotFound exception is thrown.
+		/// If the organization doesn't exist - an EntityNotFound exception is thrown.
 		/// </summary>
 		/// <param name="model">Contest form view model</param>
 		/// <param name="organizationId">The organization id for the organization the contest is in</param>
@@ -21,10 +21,17 @@ namespace Leaderboard.Core.Contracts
 		/// If the user or the contest doesn't exist - an EntityNotFound exception is thrown. If the contest and the user are in different organizations, or if the contest is already pinned for the user, or if the contest is inactive - an InvalidOperationException is thrown.
 		/// </summary>
 		/// <param name="contestId">The id of the contest that is to be pinend</param>
-		/// <param name="userId">The if of the user who pins the contest</param>
+		/// <param name="userId">The id of the user who pins the contest</param>
 		/// <returns></returns>
 		Task PinContestForUser(Guid contestId, string userId);
 
+		/// <summary>
+		/// Creates a new team for the selected contest.
+		/// If the contest doesn't exist - an EntityNotFound exception is thrown.
+		/// </summary>
+		/// <param name="model">Team form view model</param>
+		/// <param name="contestId">The id of the contest for the team</param>
+		/// <returns></returns>
 		Task CreateTeamAsync(TeamFormViewModel model, Guid contestId);
 
 		Task CreatePointAsync(PointFormViewModel model, Guid teamId, string userId);

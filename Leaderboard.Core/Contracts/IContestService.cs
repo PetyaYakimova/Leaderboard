@@ -34,6 +34,14 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task CreateTeamAsync(TeamFormViewModel model, Guid contestId);
 
+		/// <summary>
+		/// Creates a points record for the selected team from the selected user.
+		/// If the team or the user doesn't exist - an EntityNotFound exception is thrown.
+		/// </summary>
+		/// <param name="model">Point form view model</param>
+		/// <param name="teamId">Id of the team that gets the points</param>
+		/// <param name="userId">Id of the user who adds the points</param>
+		/// <returns></returns>
 		Task CreatePointAsync(PointFormViewModel model, Guid teamId, string userId);
 		#endregion
 

@@ -62,6 +62,12 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<bool> ContestExistsForOrganizationsByIdAsync(Guid contestId, Guid organizationId);
 
+		/// <summary>
+		/// Checks if the given contest has no teams.
+		/// If a contest with the given id doesn't exist - throws an entity not found exception.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		Task<bool> ContestHasNoTeamsAsync(Guid id);
 
 		Task<bool> ContestIsActiveAsync(Guid id);

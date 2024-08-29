@@ -78,6 +78,15 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<bool> ContestIsActiveAsync(Guid id);
 
+		/// <summary>
+		/// Gets all the contests for an organization based on the search criteria and returns only those of them that should be on the searched page.
+		/// </summary>
+		/// <param name="organizationId">Id of the organization</param>
+		/// <param name="searchedTerm">Search term to filter the contests by</param>
+		/// <param name="searchedNumberOfTeams">Number of teams to filter the contests by</param>
+		/// <param name="currentPage">Current page of results</param>
+		/// <param name="itemsPerPage">Number of items per page</param>
+		/// <returns></returns>
 		Task<ContestQueryServiceModel> GetAllContestsForOrganizationAsync(Guid organizationId, string? searchedTerm = null, int? searchedNumberOfTeams = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
 
 		Task<ContestFormViewModel> GetContestByIdAsync(Guid id);

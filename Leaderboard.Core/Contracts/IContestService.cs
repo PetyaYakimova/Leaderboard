@@ -105,6 +105,12 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<ContestDetailsViewModel> GetContestDetailsAsync(Guid id);
 
+		/// <summary>
+		/// Returns contest for preview view model for the given contest.
+		/// If a contest with the given id doesn't exist - throws an entity not found exception.
+		/// </summary>
+		/// <param name="id">Id of the contest</param>
+		/// <returns></returns>
 		Task<ContestForPreviewViewModel> GetContestForPreviewAsync(Guid id);
 
 		Task<Guid> GetContestForTeamByIdAsync(Guid teamId);

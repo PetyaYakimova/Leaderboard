@@ -137,6 +137,11 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<PinnedContestsViewModel> GetUserPinnedAndUnpinnedContests(string userId);
 
+		/// <summary>
+		/// Checks if a team with the given id exists.
+		/// </summary>
+		/// <param name="teamId">Id of the team</param>
+		/// <returns></returns>
 		Task<bool> TeamExistsByIdAsync(Guid teamId);
 
 		Task<bool> TeamExistsForOrganizationsByIdAsync(Guid teamId, Guid organizationId);

@@ -129,6 +129,12 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<ContestLeaderboardViewModel> GetContestLeaderboardAsync(Guid id);
 
+		/// <summary>
+		/// Returns a model with the user's pinned and unpinned contests.
+		/// If a user wuth the given id doesn't exists - throws an entity not found exception.
+		/// </summary>
+		/// <param name="userId">Id of the user</param>
+		/// <returns></returns>
 		Task<PinnedContestsViewModel> GetUserPinnedAndUnpinnedContests(string userId);
 
 		Task<bool> TeamExistsByIdAsync(Guid teamId);

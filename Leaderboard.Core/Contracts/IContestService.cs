@@ -152,6 +152,12 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<bool> TeamExistsForOrganizationsByIdAsync(Guid teamId, Guid organizationId);
 
+		/// <summary>
+		/// Checks if the team with the given id is active.
+		/// If a team with the given id doesn't exist - throws an entity not found exception.
+		/// </summary>
+		/// <param name="id">Id of the team</param>
+		/// <returns></returns>
 		Task<bool> TeamIsActiveAsync(Guid id);
 
 		Task<TeamFormViewModel> GetTeamByIdAsync(Guid id);

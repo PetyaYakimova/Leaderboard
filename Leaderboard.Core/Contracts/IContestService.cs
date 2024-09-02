@@ -168,6 +168,12 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<TeamFormViewModel> GetTeamByIdAsync(Guid id);
 
+		/// <summary>
+		/// Returns team for delete view model for the given team.
+		/// If a team with the given id doesn't exist - throws an entity not found exception.
+		/// </summary>
+		/// <param name="id">Id of the team</param>
+		/// <returns></returns>
 		Task<TeamForDeleteViewModel> GetTeamForDeleteByIdAsync(Guid id);
 
 		Task<string> GetTeamNameByIdAsync(Guid id);

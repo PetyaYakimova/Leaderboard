@@ -184,6 +184,16 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<string> GetTeamNameByIdAsync(Guid id);
 
+		/// <summary>
+		/// Gets all the points for a team based on the search criteria and returns only those of them that should be on the searched page.
+		/// </summary>
+		/// <param name="teamId">Id of the team</param>
+		/// <param name="searchedTerm"></param>
+		/// <param name="searchedPoints"></param>
+		/// <param name="searchedUserEmail"></param>
+		/// <param name="currentPage"></param>
+		/// <param name="itemsPerPage"></param>
+		/// <returns></returns>
 		Task<PointsQueryServiceModel> GetAllTeamPointsAsync(Guid teamId, string? searchedTerm = null, int? searchedPoints = null, string? searchedUserEmail = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
 		#endregion
 

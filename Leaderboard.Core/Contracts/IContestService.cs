@@ -199,6 +199,12 @@ namespace Leaderboard.Core.Contracts
 
 		//Update
 		#region
+		/// <summary>
+		/// Changes the status of the given contest.
+		/// If the contest doesn't exist - an EntityNotFound exception is thrown.
+		/// </summary>
+		/// <param name="id">Id of the contest</param>
+		/// <returns></returns>
 		Task ChangeContestStatusAsync(Guid id);
 
 		Task EditContestAsync(Guid id, ContestFormViewModel model);

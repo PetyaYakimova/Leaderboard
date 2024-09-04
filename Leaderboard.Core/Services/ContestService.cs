@@ -589,7 +589,6 @@ namespace Leaderboard.Core.Services
 				.Where(p => p.ContestId == id)
 				.ToListAsync();
 
-			//TODO: If this works - use it when deleting points for a team as well
 			if (pins.Any())
 			{
 				repository.DeleteRange(pins);

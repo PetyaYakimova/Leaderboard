@@ -647,9 +647,9 @@ namespace Leaderboard.Core.Services
 				.Where(p => p.TeamId == id)
 				.ToListAsync();
 
-			foreach (Point point in points)
+			if (points.Any())
 			{
-				await repository.DeleteAsync<Point>(point.Id);
+				repository.DeleteRange(points);
 			}
 
 			await repository.DeleteAsync<Team>(id);

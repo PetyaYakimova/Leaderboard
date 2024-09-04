@@ -224,6 +224,13 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task ChangeTeamStatusAsync(Guid id);
 
+		/// <summary>
+		/// Edits the details for the given team with those from the model.
+		/// If the team doesn't exist - an EntityNotFound exception is thrown.
+		/// </summary>
+		/// <param name="id">Id of the team</param>
+		/// <param name="model">Team form view model with the new details</param>
+		/// <returns></returns>
 		Task EditTeamAsync(Guid id, TeamFormViewModel model);
 		#endregion
 

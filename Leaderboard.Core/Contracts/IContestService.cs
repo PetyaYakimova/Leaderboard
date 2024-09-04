@@ -237,11 +237,11 @@ namespace Leaderboard.Core.Contracts
 		//Delete
 		#region
 		/// <summary>
-		/// Deletes the given contest and any pins for this contest
+		/// Deletes the given contest and any pins for this contest.
 		/// If the contest doesn't exist - an EntityNotFound exception is thrown.
 		/// If the contest has teams - an CannotDeleteException is thrown.
 		/// </summary>
-		/// <param name="id">Id of the team</param>
+		/// <param name="id">Id of the contest</param>
 		/// <returns></returns>
 		Task DeleteContestAsync(Guid id);
 

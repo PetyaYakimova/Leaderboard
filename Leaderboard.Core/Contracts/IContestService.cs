@@ -245,6 +245,14 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task DeleteContestAsync(Guid id);
 
+		/// <summary>
+		/// Unpins the given contest for the given user.
+		/// If the contest or the user doesn't exist - an EntityNotFound exception is thrown.
+		/// If the contest is not  pinned for the user - an InvalidOperationException is thrown.
+		/// </summary>
+		/// <param name="contestId">Id of the pinned contest</param>
+		/// <param name="userId">Id of the user</param>
+		/// <returns></returns>
 		Task UnpinContestForUser(Guid contestId, string userId);
 
 		Task DeleteTeamAsync(Guid id);

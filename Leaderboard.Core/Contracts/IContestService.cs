@@ -255,6 +255,12 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task UnpinContestForUser(Guid contestId, string userId);
 
+		/// <summary>
+		/// Deletes the given team and any points for it.
+		/// If the team doesn't exist - an EntityNotFound exception is thrown.
+		/// </summary>
+		/// <param name="id">Id of the team</param>
+		/// <returns></returns>
 		Task DeleteTeamAsync(Guid id);
 		#endregion
 	}

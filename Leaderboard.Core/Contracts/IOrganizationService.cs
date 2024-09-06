@@ -5,6 +5,11 @@ namespace Leaderboard.Core.Contracts
 {
 	public interface IOrganizationService
 	{
+		/// <summary>
+		/// Creates a new organization with the given name.
+		/// </summary>
+		/// <param name="organizationName">Organization name</param>
+		/// <returns></returns>
 		Task<Guid> CreateOrganizationAsync(string organizationName);
 
 		Task AddUserAsync(UserFormViewModel model, Guid organizationId);

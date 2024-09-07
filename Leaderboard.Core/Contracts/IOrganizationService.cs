@@ -14,13 +14,19 @@ namespace Leaderboard.Core.Contracts
 
 		/// <summary>
 		/// Adds a new user with the details from the model in the given organization.
-		/// If the organization doesn't exists - EntotyNotFound exception is thrown.
+		/// If the organization doesn't exists - EntityNotFound exception is thrown.
 		/// </summary>
 		/// <param name="model">User form view model</param>
 		/// <param name="organizationId">Id of the organization</param>
 		/// <returns></returns>
 		Task AddUserAsync(UserFormViewModel model, Guid organizationId);
 
+		/// <summary>
+		/// Returns Organization preview model for the given organization.
+		/// If the organization doesn't exists - EntityNotFound exception is thrown.
+		/// </summary>
+		/// <param name="organizationId">Id of the organization</param>
+		/// <returns></returns>
 		Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId);
 
 		Task<bool> OrganizationExistsByIdAsync(Guid organizationId);

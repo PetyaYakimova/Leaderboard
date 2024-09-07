@@ -29,6 +29,11 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId);
 
+		/// <summary>
+		/// Check if an organization with the given id exists.
+		/// </summary>
+		/// <param name="organizationId">Id of the organization</param>
+		/// <returns></returns>
 		Task<bool> OrganizationExistsByIdAsync(Guid organizationId);
 
 		Task<Guid> GetUserOrganizationIdAsync(string userId);

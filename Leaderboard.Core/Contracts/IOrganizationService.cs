@@ -30,12 +30,18 @@ namespace Leaderboard.Core.Contracts
 		Task<OrganizationPreviewModel> GetOrganizationInfoAsync(Guid organizationId);
 
 		/// <summary>
-		/// Check if an organization with the given id exists.
+		/// Checks if an organization with the given id exists.
 		/// </summary>
 		/// <param name="organizationId">Id of the organization</param>
 		/// <returns></returns>
 		Task<bool> OrganizationExistsByIdAsync(Guid organizationId);
 
+		/// <summary>
+		/// Returns organization id of the given user.
+		/// If the user doesn't exists - EntityNotFound exception is thrown.
+		/// </summary>
+		/// <param name="userId">Id of the user</param>
+		/// <returns></returns>
 		Task<Guid> GetUserOrganizationIdAsync(string userId);
 
 		Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchedTerm = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);

@@ -44,6 +44,14 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<Guid> GetUserOrganizationIdAsync(string userId);
 
+		/// <summary>
+		/// Returns user query service model with all the users filtlered by the search criteria and that should be on the given page of results.
+		/// </summary>
+		/// <param name="organizationId">Id of the organization</param>
+		/// <param name="searchedTerm"></param>
+		/// <param name="currentPage"></param>
+		/// <param name="itemsPerPage"></param>
+		/// <returns></returns>
 		Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchedTerm = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
 
 		Task<bool> CanUserAddUsersAsync(string userId);

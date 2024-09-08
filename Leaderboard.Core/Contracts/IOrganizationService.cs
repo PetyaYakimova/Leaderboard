@@ -54,6 +54,11 @@ namespace Leaderboard.Core.Contracts
 		/// <returns></returns>
 		Task<UserQueryServiceModel> GetAllUsersAsync(Guid organizationId, string? searchedTerm = null, int currentPage = 1, int itemsPerPage = DefaultNumberOfItemsPerPage);
 
+		/// <summary>
+		/// Returns true of the user exists and can add users. Returns false in all other cases.
+		/// </summary>
+		/// <param name="userId">Id of the user</param>
+		/// <returns></returns>
 		Task<bool> CanUserAddUsersAsync(string userId);
 	}
 }

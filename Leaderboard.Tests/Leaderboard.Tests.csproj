@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mocks\" />
-    <Folder Include="UnitTests\" />
+    <ProjectReference Include="..\Leaderboard.Core\Leaderboard.Core.csproj" />
+    <ProjectReference Include="..\Leaderboard.Infrastructure\Leaderboard.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

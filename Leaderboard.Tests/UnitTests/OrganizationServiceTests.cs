@@ -1,4 +1,5 @@
 ﻿using Leaderboard.Core.Contracts;
+using Leaderboard.Core.Models.Organization;
 using Leaderboard.Core.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -31,6 +32,29 @@ namespace Leaderboard.Tests.UnitTests
 
 			var organizationCountAfter = this.data.Organizations.Count();
 			Assert.That(organizationCountAfter, Is.EqualTo(organizationCountBefore + 1));
+		}
+
+		[Test]
+		public async Task AddUser_ShouldAddTheUserToExistingOrganization() 
+		{
+			var userCountBefore = this.data.Users.Count(u => u.OrganizationId == MainOrganization.Id);
+
+			UserFormViewModel userModel = new UserFormViewModel()
+			{
+				CanAddUsers = true,
+				Email = "new_user@mail.bg",
+				Password = "password"
+			};
+
+			await organizationService.AddUserAsync(userModel, MainOrganization.Id);
+
+			var userCountAfter = this.data.Users.Count(u => u.OrganizationId == MainOrganization.Id);
+			Assert.That(userCountAfter, Is.EqualTo(userCountBefore + 1));
+
+			var allUsers = await organizationService.GetAllUsersAsync(MainOrganization.Id);
+			var user = allUsers.Entities.FirstOrDefault(u => u.Email == userModel.Email);
+			Assert.IsNotNull(user);
+			Assert.That(user.CanAddUsers, Is.EqualTo(userModel.CanAddUsers));
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Leaderboard.Core.Contracts;
+using Leaderboard.Core.Exceptions;
 using Leaderboard.Core.Models.Organization;
 using Leaderboard.Core.Services;
 using Microsoft.Extensions.Logging;
@@ -55,6 +56,13 @@ namespace Leaderboard.Tests.UnitTests
 			var user = allUsers.Entities.FirstOrDefault(u => u.Email == userModel.Email);
 			Assert.IsNotNull(user);
 			Assert.That(user.CanAddUsers, Is.EqualTo(userModel.CanAddUsers));
+		}
+
+		[Test]
+		public void AddUser_ShouldThrowExceptionIfOrganizationDoesntExist()
+		{
+			Assert.That(async () => await organizationService.AddUserAsync(new UserFormViewModel(), Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
 	}
 }

@@ -64,5 +64,16 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await organizationService.AddUserAsync(new UserFormViewModel(), Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetOrganizationInfo_ShouldReturnCorrectOrganizationDetailsForValidId()
+		{
+			var result = await organizationService.GetOrganizationInfoAsync(MainOrganization.Id);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.Name, Is.EqualTo(MainOrganization.Name));
+			Assert.That(result.Id, Is.EqualTo(MainOrganization.Id));
+			Assert.That(result.NumberOfAdministrators, Is.EqualTo(MainOrganization.Users.Count()));
+		}
 	}
 }

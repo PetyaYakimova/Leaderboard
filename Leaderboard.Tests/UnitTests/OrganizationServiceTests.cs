@@ -75,5 +75,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.Id, Is.EqualTo(MainOrganization.Id));
 			Assert.That(result.NumberOfAdministrators, Is.EqualTo(MainOrganization.Users.Count()));
 		}
+
+		[Test]
+		public void GetOrganizationInfo_ShouldThrowExceptionIfOrganizationDoesntExist()
+		{
+			Assert.That(async () => await organizationService.GetOrganizationInfoAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

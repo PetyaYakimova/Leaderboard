@@ -90,5 +90,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsTrue(result);
 		}
+
+		[Test]
+		public async Task OrganizationExists_ShouldReturnFalseIfOrganizationDoesntExist()
+		{
+			var result = await organizationService.OrganizationExistsByIdAsync(Guid.NewGuid());
+
+			Assert.IsFalse(result);
+		}
 	}
 }

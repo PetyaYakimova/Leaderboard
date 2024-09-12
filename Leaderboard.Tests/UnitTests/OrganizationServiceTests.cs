@@ -82,5 +82,13 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await organizationService.GetOrganizationInfoAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task OrganizationExists_ShouldReturnTrueIfOrganizationExists()
+		{
+			var result = await organizationService.OrganizationExistsByIdAsync(MainOrganization.Id);
+
+			Assert.IsTrue(result);
+		}
 	}
 }

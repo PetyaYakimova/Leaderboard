@@ -98,5 +98,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsFalse(result);
 		}
+
+		[Test]
+		public async Task GetUserOrganizationId_ShouldReturnCorrectOrganizatioIdForValidUser()
+		{
+			var result = await organizationService.GetUserOrganizationIdAsync(MainUser.Id);
+
+			Assert.That(result, Is.EqualTo(MainOrganization.Id));
+		}
 	}
 }

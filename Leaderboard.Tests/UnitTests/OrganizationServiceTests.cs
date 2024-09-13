@@ -106,5 +106,12 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.That(result, Is.EqualTo(MainOrganization.Id));
 		}
+
+		[Test]
+		public void GetUserOrganizationId_ShouldThrowExceptionIfUserDoesntExist()
+		{
+			Assert.That(async () => await organizationService.GetUserOrganizationIdAsync("InvalidUserId"),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

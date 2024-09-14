@@ -123,5 +123,15 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.TotalCount, Is.EqualTo(1));
 			Assert.That(result.Entities.Count, Is.EqualTo(1));
 		}
+
+		[Test]
+		public async Task GetAllUsers_ShouldReturnZeroResultsIfTheSearchCriteriaIsNotForAnyoneInTheOrganization()
+		{
+			var result = await organizationService.GetAllUsersAsync(MainOrganization.Id, "another");
+
+			Assert.IsNotNull(result);
+			Assert.That(result.TotalCount, Is.EqualTo(0));
+			Assert.That(result.Entities.Count, Is.EqualTo(0));
+		}
 	}
 }

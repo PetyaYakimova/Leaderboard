@@ -113,5 +113,15 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await organizationService.GetUserOrganizationIdAsync("InvalidUserId"),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetAllUsers_ShouldReturnAllTheUsersFromTheOrganizationBasedOnTheSearchCriteria()
+		{
+			var result = await organizationService.GetAllUsersAsync(MainOrganization.Id, "main");
+
+			Assert.IsNotNull(result);
+			Assert.That(result.TotalCount, Is.EqualTo(1));
+			Assert.That(result.Entities.Count, Is.EqualTo(1));
+		}
 	}
 }

@@ -29,9 +29,13 @@ namespace Leaderboard.Tests.UnitTests
 
 		public Organization MainOrganization { get; private set; } = null!;
 
+		public Organization AnotherOrganization { get; private set; } = null!;
+
 		public ApplicationUser MainUser { get; private set; } = null!;
 
 		public ApplicationUser SecondaryUserWhoCannotAddUsers { get; private set; } = null!;
+
+		public ApplicationUser UserInAnotherOrganization { get; private set; } = null!;
 
 		private void SeedDatabase()
 		{
@@ -49,6 +53,13 @@ namespace Leaderboard.Tests.UnitTests
 				Name = "Main organization"
 			};
 			data.Organizations.Add(MainOrganization);
+
+			AnotherOrganization = new Organization()
+			{
+				Id = Guid.NewGuid(),
+				Name = "Another Organization"
+			};
+			data.Organizations.Add(AnotherOrganization);
 		}
 
 		private void SeedUsers()
@@ -74,6 +85,17 @@ namespace Leaderboard.Tests.UnitTests
 				CanAddUsers = false,
 			};
 			data.Users.Add(SecondaryUserWhoCannotAddUsers);
+
+			UserInAnotherOrganization = new ApplicationUser()
+			{
+				Id = "UserInAnotherOrganizationId",
+				Email = "user.anotherorg@mail.com",
+				UserName = "user.anotherorg@mail.com",
+				OrganizationId = AnotherOrganization.Id,
+				Organization = AnotherOrganization,
+				CanAddUsers = true,
+			};
+			data.Users.Add(UserInAnotherOrganization);
 		}
 	}
 }

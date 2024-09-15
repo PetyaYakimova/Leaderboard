@@ -133,5 +133,13 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.TotalCount, Is.EqualTo(0));
 			Assert.That(result.Entities.Count, Is.EqualTo(0));
 		}
+
+		[Test]
+		public async Task CanUserAddUsers_ShouldReturnCorrectBooleanWhenTheUserExists()
+		{
+			var result = await organizationService.CanUserAddUsersAsync(SecondaryUserWhoCannotAddUsers.Id);
+
+			Assert.That(result, Is.EqualTo(SecondaryUserWhoCannotAddUsers.CanAddUsers));
+		}
 	}
 }

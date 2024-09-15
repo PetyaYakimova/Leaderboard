@@ -141,5 +141,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.That(result, Is.EqualTo(SecondaryUserWhoCannotAddUsers.CanAddUsers));
 		}
+
+		[Test]
+		public async Task CanUserAddUsers_ShouldReturnFalseWhenTheUserDoesntExist()
+		{
+			var result = await organizationService.CanUserAddUsersAsync("InvalidUserId");
+
+			Assert.False(result);
+		}
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using Leaderboard.Core.Contracts;
+using Leaderboard.Core.Exceptions;
 using Leaderboard.Core.Models.Contest;
+using Leaderboard.Core.Models.Organization;
 using Leaderboard.Core.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -45,6 +47,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			var contestsCountAfter = this.data.Contests.Count(c => c.OrganizationId == MainOrganization.Id);
 			Assert.That(contestsCountAfter, Is.EqualTo(contestsCountBefore + 1));
+		}
+
+		[Test]
+		public void CreateContest_ShouldThrowExceptionIfOrganizationDoesntExist()
+		{
+			Assert.That(async () => await contestService.CreateContestAsync(new ContestFormViewModel(), Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
 	}
 }

@@ -37,10 +37,13 @@ namespace Leaderboard.Tests.UnitTests
 
 		public ApplicationUser UserInAnotherOrganization { get; private set; } = null!;
 
+		public Contest MainContest { get; private set; } = null!;
+
 		private void SeedDatabase()
 		{
 			this.SeedOrganizations();
 			this.SeedUsers();
+			this.SeedContests();
 
 			data.SaveChanges();
 		}
@@ -96,6 +99,19 @@ namespace Leaderboard.Tests.UnitTests
 				CanAddUsers = true,
 			};
 			data.Users.Add(UserInAnotherOrganization);
+		}
+
+		private void SeedContests()
+		{
+			MainContest = new Contest()
+			{
+				Id = Guid.NewGuid(),
+				Name = "Main contest",
+				OrganizationId = MainOrganization.Id,
+				Organization = MainOrganization,
+				Description = "Some contest",
+				IsActive = true
+			};
 		}
 	}
 }

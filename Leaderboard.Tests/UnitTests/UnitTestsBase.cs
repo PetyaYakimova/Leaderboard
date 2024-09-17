@@ -39,6 +39,8 @@ namespace Leaderboard.Tests.UnitTests
 
 		public Contest MainContest { get; private set; } = null!;
 
+		public Contest InactiveContest { get; private set; } = null!;
+
 		private void SeedDatabase()
 		{
 			this.SeedOrganizations();
@@ -112,6 +114,18 @@ namespace Leaderboard.Tests.UnitTests
 				Description = "Some contest",
 				IsActive = true
 			};
+			data.Contests.Add(MainContest);
+
+			InactiveContest = new Contest() 
+			{
+				Id = Guid.NewGuid(),
+				Name = "Inactive contest",
+				OrganizationId = MainOrganization.Id,
+				Organization = MainOrganization,
+				Description = "Some contest",
+				IsActive = false
+			};
+			data.Contests.Add(InactiveContest);
 		}
 	}
 }

@@ -55,5 +55,16 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.CreateContestAsync(new ContestFormViewModel(), Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task PinContestForUser_ShouldPinTheContestForValidUserInTheSameOrganization()
+		{
+			var pinnedContestsBefore = this.data.PinnedContest.Count(c => c.ContestId == MainContest.Id);
+
+			await contestService.PinContestForUser(MainContest.Id, MainUser.Id);
+
+			var pinnedContestsAfter = this.data.PinnedContest.Count(c => c.ContestId == MainContest.Id);
+			Assert.That(pinnedContestsAfter, Is.EqualTo(pinnedContestsBefore + 1));
+		}
 	}
 }

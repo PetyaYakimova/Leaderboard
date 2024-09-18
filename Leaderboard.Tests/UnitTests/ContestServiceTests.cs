@@ -80,5 +80,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.PinContestForUser(Guid.NewGuid(), MainUser.Id),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public void PinContestForUser_ShouldThrowExceptionIfContestAndUserAreInDifferentOrganizations()
+		{
+			Assert.That(async () => await contestService.PinContestForUser(MainContest.Id, UserInAnotherOrganization.Id),
+				Throws.Exception.TypeOf<InvalidOperationException>());
+		}
 	}
 }

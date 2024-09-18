@@ -87,5 +87,13 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.PinContestForUser(MainContest.Id, UserInAnotherOrganization.Id),
 				Throws.Exception.TypeOf<InvalidOperationException>());
 		}
+
+
+		[Test]
+		public void PinContestForUser_ShouldThrowExceptionIfContestIsInactive()
+		{
+			Assert.That(async () => await contestService.PinContestForUser(InactiveContest.Id, MainUser.Id),
+				Throws.Exception.TypeOf<InvalidOperationException>());
+		}
 	}
 }

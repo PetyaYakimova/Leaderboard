@@ -3,6 +3,7 @@ using Leaderboard.Core.Exceptions;
 using Leaderboard.Core.Models.Contest;
 using Leaderboard.Core.Models.Organization;
 using Leaderboard.Core.Services;
+using Leaderboard.Infrastructure.Data.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -88,6 +89,21 @@ namespace Leaderboard.Tests.UnitTests
 				Throws.Exception.TypeOf<InvalidOperationException>());
 		}
 
+		[Test]
+		public void PinContestForUser_ShouldThrowExceptionIfUserAlreadyHasPinnedThisContest()
+		{
+			PinnedContest pc = new PinnedContest()
+			{
+				UserId = MainUser.Id,
+				ContestId = MainContest.Id
+			};
+
+			data.PinnedContest.Add(pc);
+
+
+			Assert.That(async () => await contestService.PinContestForUser(MainContest.Id, MainUser.Id),
+				Throws.Exception.TypeOf<InvalidOperationException>());
+		}
 
 		[Test]
 		public void PinContestForUser_ShouldThrowExceptionIfContestIsInactive()

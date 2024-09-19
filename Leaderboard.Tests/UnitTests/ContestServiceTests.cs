@@ -48,6 +48,11 @@ namespace Leaderboard.Tests.UnitTests
 
 			var contestsCountAfter = this.data.Contests.Count(c => c.OrganizationId == MainOrganization.Id);
 			Assert.That(contestsCountAfter, Is.EqualTo(contestsCountBefore + 1));
+
+			var contest = this.data.Contests.FirstOrDefault(c=>c.Name==newContest.Name);
+			Assert.IsNotNull(contest);
+			Assert.That(contest.Description, Is.EqualTo(newContest.Description));
+			Assert.That(contest.IsActive, Is.EqualTo(newContest.IsActive));
 		}
 
 		[Test]
@@ -110,6 +115,31 @@ namespace Leaderboard.Tests.UnitTests
 		{
 			Assert.That(async () => await contestService.PinContestForUser(InactiveContest.Id, MainUser.Id),
 				Throws.Exception.TypeOf<InvalidOperationException>());
+		}
+
+		[Test]
+		public async Task CreateTeam_ShouldCreateTheTeamForExistingContest()
+		{
+			var numberOfTeamsBefore = this.data.Teams.Count(t => t.ContestId == MainContest.Id);
+
+			TeamFormViewModel model = new TeamFormViewModel()
+			{
+				Name = "New team",
+				Notes = "Some notes",
+				IsActive = true,
+				NumberOfMembers = 15,
+			};
+
+			await contestService.CreateTeamAsync(model, MainContest.Id);
+
+			var numberOfTeamsAfter = this.data.Teams.Count(t => t.ContestId == MainContest.Id);
+			Assert.That(numberOfTeamsAfter, Is.EqualTo(numberOfTeamsBefore + 1));
+
+			var team = this.data.Teams.FirstOrDefault(t => t.Name == model.Name);
+			Assert.IsNotNull(team);
+			Assert.That(team.IsActive, Is.EqualTo(model.IsActive));
+			Assert.That(team.Notes, Is.EqualTo(model.Notes));
+			Assert.That(team.NumberOfMembers, Is.EqualTo(model.NumberOfMembers));
 		}
 	}
 }

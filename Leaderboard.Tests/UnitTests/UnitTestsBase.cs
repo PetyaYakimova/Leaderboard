@@ -41,11 +41,14 @@ namespace Leaderboard.Tests.UnitTests
 
 		public Contest InactiveContest { get; private set; } = null!;
 
+		public Team MainTeam { get; private set; } = null!;
+
 		private void SeedDatabase()
 		{
 			this.SeedOrganizations();
 			this.SeedUsers();
 			this.SeedContests();
+			this.SeedTeams();
 
 			data.SaveChanges();
 		}
@@ -116,7 +119,7 @@ namespace Leaderboard.Tests.UnitTests
 			};
 			data.Contests.Add(MainContest);
 
-			InactiveContest = new Contest() 
+			InactiveContest = new Contest()
 			{
 				Id = Guid.NewGuid(),
 				Name = "Inactive contest",
@@ -126,6 +129,21 @@ namespace Leaderboard.Tests.UnitTests
 				IsActive = false
 			};
 			data.Contests.Add(InactiveContest);
+		}
+
+		private void SeedTeams()
+		{
+			MainTeam = new Team()
+			{
+				Id = Guid.NewGuid(),
+				Name = "Main team",
+				Notes = "Some notes for the team",
+				IsActive = true,
+				NumberOfMembers = 10,
+				ContestId = MainContest.Id,
+				Contest = MainContest
+			};
+			data.Teams.Add(MainTeam);
 		}
 	}
 }

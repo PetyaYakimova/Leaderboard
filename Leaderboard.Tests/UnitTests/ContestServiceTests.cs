@@ -141,5 +141,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(team.Notes, Is.EqualTo(model.Notes));
 			Assert.That(team.NumberOfMembers, Is.EqualTo(model.NumberOfMembers));
 		}
+
+		[Test]
+		public void CreateTeam_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.CreateTeamAsync(new TeamFormViewModel(), Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

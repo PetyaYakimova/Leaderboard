@@ -37,6 +37,7 @@ namespace Leaderboard.Core.Contracts
 		/// <summary>
 		/// Creates a points record for the selected team from the selected user.
 		/// If the team or the user doesn't exist - an EntityNotFound exception is thrown.
+		/// If the user is not in the same organization as the team - InvalidOperationException is thrown.
 		/// </summary>
 		/// <param name="model">Point form view model</param>
 		/// <param name="teamId">Id of the team that gets the points</param>

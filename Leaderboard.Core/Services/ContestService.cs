@@ -124,16 +124,26 @@ namespace Leaderboard.Core.Services
 
 		public async Task CreatePointAsync(PointFormViewModel model, Guid teamId, string userId)
 		{
-			if (await this.TeamExistsByIdAsync(teamId) == false)
+			var team = await repository.AllAsReadOnly<Team>()
+				.Include(t => t.Contest)
+				.FirstOrDefaultAsync(t => t.Id == teamId);
+			if (team == null)
 			{
 				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(Team), teamId);
 				throw new EntityNotFoundException();
 			}
 
-			if (await repository.AllAsReadOnly<ApplicationUser>().AnyAsync(u => u.Id == userId) == false)
+			var user = await repository.GetByIdAsync<ApplicationUser>(userId);
+			if (user == null)
 			{
 				logger.LogError(EntityWithIdWasNotFoundLoggerErrorMessage, nameof(ApplicationUser), userId);
 				throw new EntityNotFoundException();
+			}
+
+			if (team.Contest.OrganizationId != user.OrganizationId)
+			{
+				logger.LogError(UsersFromOtherOrganizationsCannotAddPointsForTeamsInThisOrganizationLoggerErrorMessage);
+				throw new InvalidOperationException();
 			}
 
 			Point point = new Point()

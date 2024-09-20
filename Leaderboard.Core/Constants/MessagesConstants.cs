@@ -22,5 +22,7 @@
 		public const string ContestCannotBePinnedBecauseItIsInactiveLoggerErrorMessage = "Contest is inactive and so it cannot be pinned!";
 
 		public const string ContestCannotBePinnedBecauseItIsInAnotherOrganizationLoggerErrorMessage = "Contest is not in the user organization!";
+
+		public const string UsersFromOtherOrganizationsCannotAddPointsForTeamsInThisOrganizationLoggerErrorMessage = "Team is not in the user organization!";
 	}
 }

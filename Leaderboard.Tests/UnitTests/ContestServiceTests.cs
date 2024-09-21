@@ -171,5 +171,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(points.Points, Is.EqualTo(model.Points));
 			Assert.That(points.Description, Is.EqualTo(model.Description));
 		}
+
+		[Test]
+		public void CreatePoint_ShouldThrowExceptionIfTeamDoesntExist()
+		{
+			Assert.That(async () => await contestService.CreatePointAsync(new PointFormViewModel(), Guid.NewGuid(), MainUser.Id),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

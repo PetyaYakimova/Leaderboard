@@ -4,6 +4,7 @@ using Leaderboard.Core.Models.Contest;
 using Leaderboard.Core.Models.Organization;
 using Leaderboard.Core.Services;
 using Leaderboard.Infrastructure.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -49,7 +50,7 @@ namespace Leaderboard.Tests.UnitTests
 			var contestsCountAfter = this.data.Contests.Count(c => c.OrganizationId == MainOrganization.Id);
 			Assert.That(contestsCountAfter, Is.EqualTo(contestsCountBefore + 1));
 
-			var contest = this.data.Contests.FirstOrDefault(c=>c.Name==newContest.Name);
+			var contest = this.data.Contests.FirstOrDefault(c => c.Name == newContest.Name);
 			Assert.IsNotNull(contest);
 			Assert.That(contest.Description, Is.EqualTo(newContest.Description));
 			Assert.That(contest.IsActive, Is.EqualTo(newContest.IsActive));
@@ -147,6 +148,28 @@ namespace Leaderboard.Tests.UnitTests
 		{
 			Assert.That(async () => await contestService.CreateTeamAsync(new TeamFormViewModel(), Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
+
+		[Test]
+		public async Task CreatePoint_ShouldAddThePointsForAValidTeam()
+		{
+			var pointRecordsBefore = this.data.Points.Count(p => p.TeamId == MainTeam.Id);
+
+			PointFormViewModel model = new PointFormViewModel()
+			{
+				Points = 5,
+				Description = "Unit testing"
+			};
+
+			await contestService.CreatePointAsync(model, MainTeam.Id, MainUser.Id);
+
+			var pointRecordsAfter = this.data.Points.Count(p => p.TeamId == MainTeam.Id);
+			Assert.That(pointRecordsAfter, Is.EqualTo(pointRecordsBefore + 1));
+
+			var points = this.data.Points.FirstOrDefault(p => p.TeamId == MainTeam.Id);
+			Assert.IsNotNull(points);
+			Assert.That(points.Points, Is.EqualTo(model.Points));
+			Assert.That(points.Description, Is.EqualTo(model.Description));
 		}
 	}
 }

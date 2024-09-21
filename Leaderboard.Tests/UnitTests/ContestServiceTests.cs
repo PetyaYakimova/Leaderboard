@@ -178,5 +178,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.CreatePointAsync(new PointFormViewModel(), Guid.NewGuid(), MainUser.Id),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public void CreatePoint_ShouldThrowExceptionIfUserDoesntExist()
+		{
+			Assert.That(async () => await contestService.CreatePointAsync(new PointFormViewModel(), MainTeam.Id, "InvalidUserId"),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

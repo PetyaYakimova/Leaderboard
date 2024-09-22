@@ -200,5 +200,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsTrue(result);
 		}
+
+		[Test]
+		public async Task ContestExist_ShouldReturnFalseWhenTheContestDoesntExist()
+		{
+			var result = await contestService.ContestExistsByIdAsync(Guid.NewGuid());
+
+			Assert.IsFalse(result);
+		}
 	}
 }

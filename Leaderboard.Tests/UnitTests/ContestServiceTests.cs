@@ -192,5 +192,13 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.CreatePointAsync(new PointFormViewModel(), MainTeam.Id, UserInAnotherOrganization.Id),
 				Throws.Exception.TypeOf<InvalidOperationException>());
 		}
+
+		[Test]
+		public async Task ContestExist_ShouldReturnTrueWhenTheContestExists()
+		{
+			var result = await contestService.ContestExistsByIdAsync(MainContest.Id);
+
+			Assert.IsTrue(result);
+		}
 	}
 }

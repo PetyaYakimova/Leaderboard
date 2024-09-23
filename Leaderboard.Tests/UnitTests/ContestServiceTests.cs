@@ -216,5 +216,14 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsTrue(result);
 		}
+
+
+		[Test]
+		public async Task ContestExistForOrganization_ShouldReturnFalseWhenTheContestDoesntExistForThisOrganization()
+		{
+			var result = await contestService.ContestExistsForOrganizationsByIdAsync(MainContest.Id, Guid.NewGuid());
+
+			Assert.IsFalse(result);
+		}
 	}
 }

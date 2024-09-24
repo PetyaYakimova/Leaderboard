@@ -241,5 +241,12 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsTrue(result);
 		}
+
+		[Test]
+		public void ContestHaNoTeams_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.ContestHasNoTeamsAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

@@ -233,5 +233,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsFalse(result);
 		}
+
+		[Test]
+		public async Task ContestHasNoTeams_ShouldReturnTrueWhenContestHasNoTeams()
+		{
+			var result = await contestService.ContestHasNoTeamsAsync(InactiveContest.Id);
+
+			Assert.IsTrue(result);
+		}
 	}
 }

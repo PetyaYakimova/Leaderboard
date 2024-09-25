@@ -256,5 +256,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsTrue(result);
 		}
+
+		[Test]
+		public async Task ContestIsActive_ShouldReturnFalseWhenContestIsNotActive()
+		{
+			var result = await contestService.ContestIsActiveAsync(InactiveContest.Id);
+
+			Assert.IsFalse(result);
+		}
 	}
 }

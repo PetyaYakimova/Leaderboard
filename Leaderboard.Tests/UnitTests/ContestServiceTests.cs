@@ -281,5 +281,16 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.Entities.Count(), Is.EqualTo(1));
 			Assert.That(result.TotalCount, Is.EqualTo(1));
 		}
+
+		[Test]
+		public async Task GetContestById_ShouldReturnCorrectContestDataForExistingContest()
+		{
+			var result = await contestService.GetContestByIdAsync(MainContest.Id);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
+			Assert.That(result.Description, Is.EqualTo(MainContest.Description));
+			Assert.That(result.IsActive, Is.EqualTo(MainContest.IsActive));
+		}
 	}
 }

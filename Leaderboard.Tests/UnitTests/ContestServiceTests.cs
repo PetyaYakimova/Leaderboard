@@ -271,5 +271,15 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.ContestIsActiveAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetAllContestForOrganization_ShouldReturnTheCorrectContests()
+		{
+			var result = await contestService.GetAllContestsForOrganizationAsync(MainOrganization.Id, "Main", 1);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.Entities.Count(), Is.EqualTo(1));
+			Assert.That(result.TotalCount, Is.EqualTo(1));
+		}
 	}
 }

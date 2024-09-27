@@ -294,7 +294,7 @@ namespace Leaderboard.Tests.UnitTests
 		}
 
 		[Test]
-		public void GetContestByid_ShouldThrowExceptionIfContestDoesntExist()
+		public void GetContestById_ShouldThrowExceptionIfContestDoesntExist()
 		{
 			Assert.That(async () => await contestService.GetContestByIdAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
@@ -310,6 +310,13 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
 			Assert.That(result.IsActive, Is.EqualTo(MainContest.IsActive));
 			Assert.That(result.Teams.Count(), Is.EqualTo(1));
+		}
+
+		[Test]
+		public void GetContestDetails_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.GetContestDetailsAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
 	}
 }

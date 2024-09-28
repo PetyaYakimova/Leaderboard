@@ -301,7 +301,7 @@ namespace Leaderboard.Tests.UnitTests
 		}
 
 		[Test]
-		public async Task GetContestDetails_ShouldReturnValiddetailsForExistingContest()
+		public async Task GetContestDetails_ShouldReturnValidDetailsForExistingContest()
 		{
 			var result = await contestService.GetContestDetailsAsync(MainContest.Id);
 
@@ -317,6 +317,16 @@ namespace Leaderboard.Tests.UnitTests
 		{
 			Assert.That(async () => await contestService.GetContestDetailsAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
+
+		[Test]
+		public async Task GetContestForPreview_ShouldReturnValidDetailsForExistingContest()
+		{
+			var result = await contestService.GetContestForPreviewAsync(MainContest.Id);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.Id, Is.EqualTo(MainContest.Id));
+			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
 		}
 	}
 }

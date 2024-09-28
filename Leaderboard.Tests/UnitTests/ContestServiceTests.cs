@@ -328,5 +328,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.Id, Is.EqualTo(MainContest.Id));
 			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
 		}
+
+		[Test]
+		public void GetContestForPreview_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.GetContestForPreviewAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

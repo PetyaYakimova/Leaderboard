@@ -359,8 +359,16 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsNotNull(result);
 			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
+			Assert.That(result.Description, Is.EqualTo(MainContest.Description));
 			Assert.That(result.NumberOfTeams, Is.EqualTo(MainContest.Teams.Count()));
 			Assert.That(result.Teams.Count(), Is.EqualTo(MainContest.Teams.Count()));
+		}
+
+		[Test]
+		public void GetContestLeaderboard_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.GetContestLeaderboardAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
 	}
 }

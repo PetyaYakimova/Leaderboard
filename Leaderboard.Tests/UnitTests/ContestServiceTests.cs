@@ -351,5 +351,16 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.GetContestForTeamByIdAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetContestLeaderboard_ShouldReturnCorrectLeaderboardForExistingContest()
+		{
+			var result = await contestService.GetContestLeaderboardAsync(MainContest.Id);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
+			Assert.That(result.NumberOfTeams, Is.EqualTo(MainContest.Teams.Count()));
+			Assert.That(result.Teams.Count(), Is.EqualTo(MainContest.Teams.Count()));
+		}
 	}
 }

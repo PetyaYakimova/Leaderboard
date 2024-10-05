@@ -384,5 +384,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.UnpinnedActiveContests.Count(), Is.EqualTo(1));
 			Assert.That(result.UnpinnedActiveContests.First().Id, Is.EqualTo(AnotherContest.Id));
 		}
+
+		[Test]
+		public void GetUserPinnedAndUnpinnedContests_ShouldThrowExceptionIfUsertDoesntExist()
+		{
+			Assert.That(async () => await contestService.GetUserPinnedAndUnpinnedContests("InvalidUserId"),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

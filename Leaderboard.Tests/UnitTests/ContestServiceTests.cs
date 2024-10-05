@@ -370,5 +370,19 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.GetContestLeaderboardAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetUserPinnedAndUnipinnedContests_ShouldReturnTheCorrectActiveContests()
+		{
+			await contestService.PinContestForUser(MainContest.Id, MainUser.Id);
+
+			var result = await contestService.GetUserPinnedAndUnpinnedContests(MainUser.Id);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.PinnedContests.Count(), Is.EqualTo(1));
+			Assert.That(result.PinnedContests.First().Id, Is.EqualTo(MainContest.Id));
+			Assert.That(result.UnpinnedActiveContests.Count(), Is.EqualTo(1));
+			Assert.That(result.UnpinnedActiveContests.First().Id, Is.EqualTo(AnotherContest.Id));
+		}
 	}
 }

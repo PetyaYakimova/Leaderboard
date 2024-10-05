@@ -39,6 +39,8 @@ namespace Leaderboard.Tests.UnitTests
 
 		public Contest MainContest { get; private set; } = null!;
 
+		public Contest AnotherContest { get; private set; } = null!;
+
 		public Contest InactiveContest { get; private set; } = null!;
 
 		public Team MainTeam { get; private set; } = null!;
@@ -118,6 +120,17 @@ namespace Leaderboard.Tests.UnitTests
 				IsActive = true
 			};
 			data.Contests.Add(MainContest);
+
+			AnotherContest = new Contest()
+			{
+				Id = Guid.NewGuid(),
+				Name = "Another contest",
+				OrganizationId = MainOrganization.Id,
+				Organization = MainOrganization,
+				Description = "Some other contest",
+				IsActive = true
+			};
+			data.Contests.Add(AnotherContest);
 
 			InactiveContest = new Contest()
 			{

@@ -7,6 +7,7 @@ using Leaderboard.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Net.WebSockets;
 
 namespace Leaderboard.Tests.UnitTests
 {
@@ -390,6 +391,14 @@ namespace Leaderboard.Tests.UnitTests
 		{
 			Assert.That(async () => await contestService.GetUserPinnedAndUnpinnedContests("InvalidUserId"),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
+
+		[Test]
+		public async Task TeamExist_ShouldReturnTrueForExistingTeam()
+		{
+			var result = await contestService.TeamExistsByIdAsync(MainTeam.Id);
+
+			Assert.IsTrue(result);
 		}
 	}
 }

@@ -400,5 +400,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsTrue(result);
 		}
+
+		[Test]
+		public async Task TeamExist_ShouldReturnFalseForNonExistingTeam()
+		{
+			var result = await contestService.TeamExistsByIdAsync(Guid.NewGuid());
+
+			Assert.IsFalse(result);
+		}
 	}
 }

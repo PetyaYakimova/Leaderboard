@@ -408,5 +408,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsFalse(result);
 		}
+
+		[Test]
+		public async Task TeamExistForOrganization_ShouldReturnTrueForExistingTeamInTheOrganization()
+		{
+			var result = await contestService.TeamExistsForOrganizationsByIdAsync(MainTeam.Id, MainOrganization.Id);
+
+			Assert.IsTrue(result);
+		}
 	}
 }

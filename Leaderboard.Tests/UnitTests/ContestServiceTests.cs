@@ -276,7 +276,7 @@ namespace Leaderboard.Tests.UnitTests
 		[Test]
 		public async Task GetAllContestForOrganization_ShouldReturnTheCorrectContests()
 		{
-			var result = await contestService.GetAllContestsForOrganizationAsync(MainOrganization.Id, "Main", 1);
+			var result = await contestService.GetAllContestsForOrganizationAsync(MainOrganization.Id, "Main", 2);
 
 			Assert.IsNotNull(result);
 			Assert.That(result.Entities.Count(), Is.EqualTo(1));
@@ -310,7 +310,7 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.Id, Is.EqualTo(MainContest.Id));
 			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
 			Assert.That(result.IsActive, Is.EqualTo(MainContest.IsActive));
-			Assert.That(result.Teams.Count(), Is.EqualTo(1));
+			Assert.That(result.Teams.Count(), Is.EqualTo(2));
 		}
 
 		[Test]
@@ -362,7 +362,7 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.Name, Is.EqualTo(MainContest.Name));
 			Assert.That(result.Description, Is.EqualTo(MainContest.Description));
 			Assert.That(result.NumberOfTeams, Is.EqualTo(MainContest.Teams.Count()));
-			Assert.That(result.Teams.Count(), Is.EqualTo(MainContest.Teams.Count()));
+			Assert.That(result.Teams.Count(), Is.EqualTo(MainContest.Teams.Count(t => t.IsActive == true)));
 		}
 
 		[Test]
@@ -431,6 +431,14 @@ namespace Leaderboard.Tests.UnitTests
 			var result = await contestService.TeamExistsForOrganizationsByIdAsync(Guid.NewGuid(), AnotherOrganization.Id);
 
 			Assert.IsFalse(result);
+		}
+
+		[Test]
+		public async Task TeamIsActive_ShouldReturnTrueWhenTeamIsActive()
+		{
+			var result = await contestService.TeamIsActiveAsync(MainTeam.Id);
+
+			Assert.IsTrue(result);
 		}
 	}
 }

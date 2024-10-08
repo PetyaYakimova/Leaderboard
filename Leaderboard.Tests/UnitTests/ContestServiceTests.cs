@@ -387,7 +387,7 @@ namespace Leaderboard.Tests.UnitTests
 		}
 
 		[Test]
-		public void GetUserPinnedAndUnpinnedContests_ShouldThrowExceptionIfUsertDoesntExist()
+		public void GetUserPinnedAndUnpinnedContests_ShouldThrowExceptionIfUserDoesntExist()
 		{
 			Assert.That(async () => await contestService.GetUserPinnedAndUnpinnedContests("InvalidUserId"),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
@@ -447,6 +447,13 @@ namespace Leaderboard.Tests.UnitTests
 			var result = await contestService.TeamIsActiveAsync(InactiveTeam.Id);
 
 			Assert.IsFalse(result);
+		}
+
+		[Test]
+		public void TeamIsActive_ShouldThrowExceptionIfTeamDoesntExist()
+		{
+			Assert.That(async () => await contestService.TeamIsActiveAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
 	}
 }

@@ -45,6 +45,8 @@ namespace Leaderboard.Tests.UnitTests
 
 		public Team MainTeam { get; private set; } = null!;
 
+		public Team InactiveTeam { get; private set; } = null!;
+
 		private void SeedDatabase()
 		{
 			this.SeedOrganizations();
@@ -157,6 +159,18 @@ namespace Leaderboard.Tests.UnitTests
 				Contest = MainContest
 			};
 			data.Teams.Add(MainTeam);
+
+			InactiveTeam= new Team()
+			{
+				Id = Guid.NewGuid(),
+				Name = "Inactive team",
+				Notes = "Some notes for the inactive team",
+				IsActive = false,
+				NumberOfMembers = 1,
+				ContestId = MainContest.Id,
+				Contest = MainContest
+			};
+			data.Teams.Add(InactiveTeam);
 		}
 	}
 }

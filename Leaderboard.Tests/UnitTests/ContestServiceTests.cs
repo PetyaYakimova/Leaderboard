@@ -440,5 +440,13 @@ namespace Leaderboard.Tests.UnitTests
 
 			Assert.IsTrue(result);
 		}
+
+		[Test]
+		public async Task TeamIsActive_ShouldReturnFalseWhenTeamIsNotActive()
+		{
+			var result = await contestService.TeamIsActiveAsync(InactiveTeam.Id);
+
+			Assert.IsFalse(result);
+		}
 	}
 }

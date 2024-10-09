@@ -455,5 +455,17 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.TeamIsActiveAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetTeamById_ShouldReturnValidTeamData()
+		{
+			var result = await contestService.GetTeamByIdAsync(MainTeam.Id);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.Name, Is.EqualTo(MainTeam.Name));
+			Assert.That(result.IsActive, Is.EqualTo(MainTeam.IsActive));
+			Assert.That(result.Notes, Is.EqualTo(MainTeam.Notes));
+			Assert.That(result.NumberOfMembers, Is.EqualTo(MainTeam.NumberOfMembers));
+		}
 	}
 }

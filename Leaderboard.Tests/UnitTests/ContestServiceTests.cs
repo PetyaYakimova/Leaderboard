@@ -167,7 +167,7 @@ namespace Leaderboard.Tests.UnitTests
 			var pointRecordsAfter = this.data.Points.Count(p => p.TeamId == MainTeam.Id);
 			Assert.That(pointRecordsAfter, Is.EqualTo(pointRecordsBefore + 1));
 
-			var points = this.data.Points.FirstOrDefault(p => p.TeamId == MainTeam.Id);
+			var points = this.data.Points.LastOrDefault(p => p.TeamId == MainTeam.Id);
 			Assert.IsNotNull(points);
 			Assert.That(points.Points, Is.EqualTo(model.Points));
 			Assert.That(points.Description, Is.EqualTo(model.Description));
@@ -511,7 +511,7 @@ namespace Leaderboard.Tests.UnitTests
 		[Test]
 		public async Task GetAllTeamPoints_ShouldReturnValidData()
 		{
-			var result = await contestService.GetAllTeamPointsAsync(MainTeam.Id, "Main", MainTeamPoint.Points, MainTeamPoint.AddedByUser.Email);
+			var result = await contestService.GetAllTeamPointsAsync(MainTeam.Id, "main", MainTeamPoint.Points, MainTeamPoint.AddedByUser.Email);
 
 			Assert.IsNotNull(result);
 			Assert.That(result.TotalCount, Is.EqualTo(1));

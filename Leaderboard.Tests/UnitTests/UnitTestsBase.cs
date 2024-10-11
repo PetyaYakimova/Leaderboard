@@ -184,7 +184,7 @@ namespace Leaderboard.Tests.UnitTests
 				TeamId = MainTeam.Id,
 				Team = MainTeam,
 				Points = 15,
-				Description = "Some description",
+				Description = "Some main description",
 				AddedByUserId = MainUser.Id,
 				AddedByUser = MainUser
 			};

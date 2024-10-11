@@ -491,5 +491,14 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.GetTeamForDeleteByIdAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetTeamNameById_ShouldReturnRightNameForValidTeam()
+		{
+			var result = await contestService.GetTeamNameByIdAsync(MainTeam.Id);
+
+			Assert.IsNotNull(result);
+			Assert.That(result, Is.EqualTo(MainTeam.Name));
+		}
 	}
 }

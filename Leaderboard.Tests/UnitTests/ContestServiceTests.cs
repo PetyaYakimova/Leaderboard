@@ -507,5 +507,15 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.GetTeamNameByIdAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task GetAllTeamPoints_ShouldReturnValidData()
+		{
+			var result = await contestService.GetAllTeamPointsAsync(MainTeam.Id, "Main", MainTeamPoint.Points, MainTeamPoint.AddedByUser.Email);
+
+			Assert.IsNotNull(result);
+			Assert.That(result.TotalCount, Is.EqualTo(1));
+			Assert.That(result.Entities.Count(), Is.EqualTo(1));
+		}
 	}
 }

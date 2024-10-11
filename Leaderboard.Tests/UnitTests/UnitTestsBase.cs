@@ -47,12 +47,15 @@ namespace Leaderboard.Tests.UnitTests
 
 		public Team InactiveTeam { get; private set; } = null!;
 
+		public Point MainTeamPoint { get; private set; } = null!;
+
 		private void SeedDatabase()
 		{
 			this.SeedOrganizations();
 			this.SeedUsers();
 			this.SeedContests();
 			this.SeedTeams();
+			this.SeedPoints();
 
 			data.SaveChanges();
 		}
@@ -160,7 +163,7 @@ namespace Leaderboard.Tests.UnitTests
 			};
 			data.Teams.Add(MainTeam);
 
-			InactiveTeam= new Team()
+			InactiveTeam = new Team()
 			{
 				Id = Guid.NewGuid(),
 				Name = "Inactive team",
@@ -171,6 +174,21 @@ namespace Leaderboard.Tests.UnitTests
 				Contest = MainContest
 			};
 			data.Teams.Add(InactiveTeam);
+		}
+
+		public void SeedPoints()
+		{
+			MainTeamPoint = new Point()
+			{
+				Id = 1,
+				TeamId = MainTeam.Id,
+				Team = MainTeam,
+				Points = 15,
+				Description = "Some description",
+				AddedByUserId = MainUser.Id,
+				AddedByUser = MainUser
+			};
+			data.Points.Add(MainTeamPoint);
 		}
 	}
 }

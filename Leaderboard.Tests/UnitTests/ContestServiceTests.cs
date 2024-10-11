@@ -500,5 +500,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.IsNotNull(result);
 			Assert.That(result, Is.EqualTo(MainTeam.Name));
 		}
+
+		[Test]
+		public void GetTeamNameById_ShouldThrowExceptionIfTeamDoesntExist()
+		{
+			Assert.That(async () => await contestService.GetTeamNameByIdAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

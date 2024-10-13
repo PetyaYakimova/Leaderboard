@@ -528,5 +528,12 @@ namespace Leaderboard.Tests.UnitTests
 			bool statusAfter = InactiveContest.IsActive;
 			Assert.That(statusAfter, Is.Not.EqualTo(statusBefore));
 		}
+
+		[Test]
+		public void ChangeContestStatus_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.ChangeContestStatusAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

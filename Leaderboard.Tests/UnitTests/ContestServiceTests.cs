@@ -517,5 +517,16 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(result.TotalCount, Is.EqualTo(1));
 			Assert.That(result.Entities.Count(), Is.EqualTo(1));
 		}
+
+		[Test]
+		public async Task ChangeContestStatus_ShouldChangeTheStatusCorrectly()
+		{
+			bool statusBefore = InactiveContest.IsActive;
+
+			await contestService.ChangeContestStatusAsync(InactiveContest.Id);
+
+			bool statusAfter = InactiveContest.IsActive;
+			Assert.That(statusAfter, Is.Not.EqualTo(statusBefore));
+		}
 	}
 }

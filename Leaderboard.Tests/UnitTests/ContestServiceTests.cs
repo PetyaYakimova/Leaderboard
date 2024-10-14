@@ -535,5 +535,22 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.ChangeContestStatusAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task EditContest_ShouldChangeTheContestDetails()
+		{
+			ContestFormViewModel newData = new ContestFormViewModel()
+			{
+				Name = "New contest name",
+				Description = "New description",
+				IsActive = true
+			};
+
+			await contestService.EditContestAsync(InactiveContest.Id, newData);
+
+			Assert.That(InactiveContest.Name, Is.EqualTo(newData.Name));
+			Assert.That(InactiveContest.Description, Is.EqualTo(newData.Description));
+			Assert.That(InactiveContest.IsActive, Is.EqualTo(newData.IsActive));
+		}
 	}
 }

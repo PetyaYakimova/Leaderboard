@@ -552,5 +552,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(InactiveContest.Description, Is.EqualTo(newData.Description));
 			Assert.That(InactiveContest.IsActive, Is.EqualTo(newData.IsActive));
 		}
+
+		[Test]
+		public void EditContest_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.EditContestAsync(Guid.NewGuid(), new ContestFormViewModel()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

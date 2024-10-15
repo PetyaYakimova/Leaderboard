@@ -559,5 +559,16 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.EditContestAsync(Guid.NewGuid(), new ContestFormViewModel()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task ChangeTeamStatus_ShouldChangeTheStatusCorrectly()
+		{
+			bool statusBefore = InactiveTeam.IsActive;
+
+			await contestService.ChangeTeamStatusAsync(InactiveTeam.Id);
+
+			bool statusAfter = InactiveTeam.IsActive;
+			Assert.That(statusAfter, Is.Not.EqualTo(statusBefore));
+		}
 	}
 }

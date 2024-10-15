@@ -570,5 +570,12 @@ namespace Leaderboard.Tests.UnitTests
 			bool statusAfter = InactiveTeam.IsActive;
 			Assert.That(statusAfter, Is.Not.EqualTo(statusBefore));
 		}
+
+		[Test]
+		public void ChangeTeamStatus_ShouldThrowExceptionIfTeamDoesntExist()
+		{
+			Assert.That(async () => await contestService.ChangeTeamStatusAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

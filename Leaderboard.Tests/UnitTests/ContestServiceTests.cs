@@ -597,5 +597,11 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(InactiveTeam.IsActive, Is.EqualTo(newData.IsActive));
 		}
 
+		[Test]
+		public void EditTeam_ShouldThrowExceptionIfTeamDoesntExist()
+		{
+			Assert.That(async () => await contestService.EditTeamAsync(Guid.NewGuid(), new TeamFormViewModel()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

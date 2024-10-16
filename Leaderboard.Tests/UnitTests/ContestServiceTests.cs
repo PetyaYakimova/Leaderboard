@@ -577,5 +577,25 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.ChangeTeamStatusAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task EditTeam_ShouldChangeTheTeamDetails()
+		{
+			TeamFormViewModel newData = new TeamFormViewModel()
+			{
+				Name = "New team name",
+				Notes = "New notes for the team",
+				NumberOfMembers = 12,
+				IsActive = true
+			};
+
+			await contestService.EditTeamAsync(InactiveTeam.Id, newData);
+
+			Assert.That(InactiveTeam.Name, Is.EqualTo(newData.Name));
+			Assert.That(InactiveTeam.Notes, Is.EqualTo(newData.Notes));
+			Assert.That(InactiveTeam.NumberOfMembers, Is.EqualTo(newData.NumberOfMembers));
+			Assert.That(InactiveTeam.IsActive, Is.EqualTo(newData.IsActive));
+		}
+
 	}
 }

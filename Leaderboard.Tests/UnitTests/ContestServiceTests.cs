@@ -603,5 +603,31 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.EditTeamAsync(Guid.NewGuid(), new TeamFormViewModel()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task DeleteContest_ShouldDeleteAContestWithoutTeam()
+		{
+			var numberOfContestsBefore = data.Contests.Count();
+
+			await contestService.DeleteContestAsync(InactiveContest.Id);
+
+			var numberOfContestsAfter = data.Contests.Count();
+			Assert.That(numberOfContestsAfter, Is.EqualTo(numberOfContestsBefore - 1));
+		}
+
+		[Test]
+		public async Task DeleteContest_ShouldDeleteAContestAndPins()
+		{
+			await contestService.PinContestForUser(AnotherContest.Id, MainUser.Id);
+			var numberOfContestsBefore = data.Contests.Count();
+			var numberOfPinsBefore = data.PinnedContest.Count(p => p.UserId == MainUser.Id);
+
+			await contestService.DeleteContestAsync(AnotherContest.Id);
+
+			var numberOfContestsAfter = data.Contests.Count();
+			var numberOfPinsAfter = data.PinnedContest.Count(p => p.UserId == MainUser.Id);
+			Assert.That(numberOfContestsAfter, Is.EqualTo(numberOfContestsBefore - 1));
+			Assert.That(numberOfPinsAfter, Is.EqualTo(numberOfPinsBefore - 1));
+		}
 	}
 }

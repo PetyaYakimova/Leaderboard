@@ -636,5 +636,17 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.DeleteContestAsync(Guid.NewGuid()),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public async Task UnpinContestForUser_ShouldRemoveThePinForValidPinnedContest()
+		{
+			await contestService.PinContestForUser(MainContest.Id, MainUser.Id);
+			var numberOfPinsBefore = data.PinnedContest.Count(p => p.UserId == MainUser.Id);
+
+			await contestService.UnpinContestForUser(MainContest.Id, MainUser.Id);
+
+			var numberOfPinsAfter = data.PinnedContest.Count(p => p.UserId == MainUser.Id);
+			Assert.That(numberOfPinsAfter, Is.EqualTo(numberOfPinsBefore - 1));
+		}
 	}
 }

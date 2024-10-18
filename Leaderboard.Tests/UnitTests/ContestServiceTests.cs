@@ -662,5 +662,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(async () => await contestService.UnpinContestForUser(MainContest.Id, "InvalidUserId"),
 				Throws.Exception.TypeOf<EntityNotFoundException>());
 		}
+
+		[Test]
+		public void UnpinContestForUser_ShouldThrowExceptionIfUserHasNotPinnedThisContest()
+		{
+			Assert.That(async () => await contestService.UnpinContestForUser(MainContest.Id, MainUser.Id),
+				Throws.Exception.TypeOf<InvalidOperationException>());
+		}
 	}
 }

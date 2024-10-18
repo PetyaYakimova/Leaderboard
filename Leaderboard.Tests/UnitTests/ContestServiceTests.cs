@@ -648,5 +648,12 @@ namespace Leaderboard.Tests.UnitTests
 			var numberOfPinsAfter = data.PinnedContest.Count(p => p.UserId == MainUser.Id);
 			Assert.That(numberOfPinsAfter, Is.EqualTo(numberOfPinsBefore - 1));
 		}
+
+		[Test]
+		public void UnpinContestForUser_ShouldThrowExceptionIfContestDoesntExist()
+		{
+			Assert.That(async () => await contestService.UnpinContestForUser(Guid.NewGuid(), MainUser.Id),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

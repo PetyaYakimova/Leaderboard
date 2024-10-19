@@ -695,5 +695,12 @@ namespace Leaderboard.Tests.UnitTests
 			Assert.That(teamsAfter, Is.EqualTo(teamsBefore - 1));
 			Assert.That(pointsAfter, Is.EqualTo(pointsBefore - 1));
 		}
+
+		[Test]
+		public void DeleteTeam_ShouldThrowExceptionIfTeamDoesntExist()
+		{
+			Assert.That(async () => await contestService.DeleteTeamAsync(Guid.NewGuid()),
+				Throws.Exception.TypeOf<EntityNotFoundException>());
+		}
 	}
 }

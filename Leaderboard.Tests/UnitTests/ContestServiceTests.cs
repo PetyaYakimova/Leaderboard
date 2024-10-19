@@ -5,6 +5,7 @@ using Leaderboard.Core.Models.Organization;
 using Leaderboard.Core.Services;
 using Leaderboard.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Net.WebSockets;
@@ -668,6 +669,17 @@ namespace Leaderboard.Tests.UnitTests
 		{
 			Assert.That(async () => await contestService.UnpinContestForUser(MainContest.Id, MainUser.Id),
 				Throws.Exception.TypeOf<InvalidOperationException>());
+		}
+
+		[Test]
+		public async Task DeleteTeam_ShouldDeleteValidTeam()
+		{
+			var teamsBefore = data.Teams.Count(t => t.ContestId == MainContest.Id);
+
+			await contestService.DeleteTeamAsync(InactiveTeam.Id);
+			
+			var teamsAfter = data.Teams.Count(t => t.ContestId == MainContest.Id);
+			Assert.That(teamsAfter, Is.EqualTo(teamsBefore - 1));
 		}
 	}
 }

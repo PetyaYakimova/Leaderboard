@@ -677,9 +677,23 @@ namespace Leaderboard.Tests.UnitTests
 			var teamsBefore = data.Teams.Count(t => t.ContestId == MainContest.Id);
 
 			await contestService.DeleteTeamAsync(InactiveTeam.Id);
-			
+
 			var teamsAfter = data.Teams.Count(t => t.ContestId == MainContest.Id);
 			Assert.That(teamsAfter, Is.EqualTo(teamsBefore - 1));
+		}
+
+		[Test]
+		public async Task DeleteTeam_ShouldDeleteValidTeamAndItsPoints()
+		{
+			var teamsBefore = data.Teams.Count(t => t.ContestId == MainContest.Id);
+			var pointsBefore = data.Points.Count();
+
+			await contestService.DeleteTeamAsync(MainTeam.Id);
+
+			var teamsAfter = data.Teams.Count(t => t.ContestId == MainContest.Id);
+			var pointsAfter = data.Points.Count();
+			Assert.That(teamsAfter, Is.EqualTo(teamsBefore - 1));
+			Assert.That(pointsAfter, Is.EqualTo(pointsBefore - 1));
 		}
 	}
 }
